@@ -157,7 +157,7 @@ function Sidebar() {
   const page = useAppStore((state) => state.page);
   const setPage = useAppStore((state) => state.setPage);
   return (
-    <aside className="hidden border-r border-transparent bg-white p-4 lg:block">
+    <aside className="sidebar-panel hidden border-r border-transparent bg-white p-4 lg:block">
       <button onClick={() => setPage("landing")} className="mb-8 flex items-center gap-3">
         <BrandMark />
         <div className="text-left">
@@ -196,7 +196,7 @@ function TopNav() {
   }, [isDarkTheme]);
 
   return (
-    <header className="border-b border-transparent bg-white/95 px-4 py-3 backdrop-blur">
+    <header className="top-nav-bar border-b border-transparent bg-white/95 px-4 py-3 backdrop-blur">
       <div className="flex items-center justify-between gap-3">
         <button onClick={() => setPage("landing")} className="flex items-center gap-2 font-black lg:hidden">
           <BrandMark size="sm" /> Vsports
@@ -253,17 +253,17 @@ function TopBanner() {
         alt="Football banner"
         className="size-full object-cover object-[center_18%]"
       />
-      <div className="pointer-events-none absolute inset-x-0 bottom-0 h-10 bg-gradient-to-b from-transparent to-white" />
+      <div className="banner-fade pointer-events-none absolute inset-x-0 bottom-0 h-12" />
     </div>
   );
 }
 
 function AppLayout({ children }: { children: ReactNode }) {
   return (
-    <div className="min-h-screen lg:grid lg:grid-cols-[260px_1fr]">
+    <div className="app-shell min-h-screen lg:grid lg:grid-cols-[260px_1fr]">
       <Sidebar />
-      <div>
-        <div className="sticky top-0 z-20 bg-white">
+      <div className="app-content">
+        <div className="app-header-stack sticky top-0 z-20 bg-white">
           <TopBanner />
           <TopNav />
         </div>

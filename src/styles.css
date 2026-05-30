@@ -86,6 +86,10 @@ button:disabled {
   letter-spacing: -0.04em;
 }
 
+.banner-fade {
+  background: linear-gradient(to bottom, transparent, #ffffff);
+}
+
 * {
   border-color: transparent;
 }
@@ -106,9 +110,21 @@ img {
 :root.dark-theme .glass,
 :root.dark-theme .brand-panel,
 :root.dark-theme .listed-game-card,
-:root.dark-theme [class*="bg-white"],
 :root.dark-theme [class*="bg-[#f6f6f2]"] {
   background-color: #101010 !important;
+}
+
+:root.dark-theme .app-shell,
+:root.dark-theme .app-content,
+:root.dark-theme .sidebar-panel,
+:root.dark-theme [class*="bg-white"] {
+  background-color: #000000 !important;
+}
+
+:root.dark-theme .app-header-stack,
+:root.dark-theme .top-nav-bar,
+:root.dark-theme .top-nav-bar [class*="bg-white"] {
+  background-color: #000000 !important;
 }
 
 :root.dark-theme [class*="bg-lime-50"],
@@ -161,6 +177,6 @@ img {
   background-color: #17210c !important;
 }
 
-:root.dark-theme .to-white {
-  --tw-gradient-to: #050505 var(--tw-gradient-to-position);
+:root.dark-theme .banner-fade {
+  background: linear-gradient(to bottom, transparent, #000000);
 }
