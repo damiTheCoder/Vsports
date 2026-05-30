@@ -1,0 +1,94 @@
+@import "tailwindcss";
+
+@font-face {
+  font-family: "Glacial Indifference";
+  src:
+    local("Glacial Indifference"),
+    url("/fonts/GlacialIndifference-Regular.woff2") format("woff2");
+  font-weight: 400 900;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "glaicalindiefference";
+  src:
+    local("Glacial Indifference"),
+    url("/fonts/GlacialIndifference-Regular.woff2") format("woff2");
+  font-weight: 400 900;
+  font-style: normal;
+  font-display: swap;
+}
+
+:root {
+  color-scheme: light;
+  font-family:
+    "Glacial Indifference", "glaicalindiefference", "GlacialIndifference",
+    Avenir, Montserrat, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont,
+    "Segoe UI", sans-serif;
+  background: #ffffff;
+}
+
+body {
+  margin: 0;
+  min-width: 320px;
+  min-height: 100vh;
+  background: #ffffff;
+  color: #050505;
+}
+
+button,
+input,
+select,
+textarea {
+  font: inherit;
+}
+
+button {
+  cursor: pointer;
+}
+
+button:disabled {
+  cursor: not-allowed;
+}
+
+.glass {
+  border: 0;
+  background: #ffffff;
+  box-shadow: none;
+  backdrop-filter: none;
+}
+
+.brand-panel {
+  background: #ffffff;
+}
+
+.listed-game-card {
+  background: #f6f6f2;
+}
+
+.brand-logo {
+  display: grid;
+  place-items: center;
+  background: #a7ff2f;
+  color: #000000;
+  font-weight: 900;
+  letter-spacing: -0.04em;
+}
+
+* {
+  border-color: transparent;
+}
+
+img {
+  box-shadow: none;
+}
+
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+
+.no-scrollbar {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
