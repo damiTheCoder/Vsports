@@ -6,10 +6,7 @@ import {
   Coins,
   Gavel,
   History,
-  Home,
   LogIn,
-  Medal,
-  MessageSquare,
   Mic,
   Moon,
   Plus,
@@ -36,14 +33,20 @@ import type {
 } from "./types";
 
 const navItems: { page: Page; label: string; icon: ReactNode }[] = [
-  { page: "dashboard", label: "Dashboard", icon: <Home size={18} /> },
-  { page: "marketplace", label: "Marketplace", icon: <Swords size={18} /> },
-  { page: "create", label: "Create", icon: <Plus size={18} /> },
-  { page: "wallet", label: "Wallet", icon: <Wallet size={18} /> },
-  { page: "rooms", label: "Match Rooms", icon: <Bot size={18} /> },
-  { page: "profile", label: "Profile", icon: <UserRound size={18} /> },
-  { page: "history", label: "History", icon: <History size={18} /> },
+  { page: "dashboard", label: "Dashboard", icon: <BadgeDollarSign size={18} strokeWidth={2.4} /> },
+  { page: "marketplace", label: "Marketplace", icon: <Swords size={18} strokeWidth={2.4} /> },
+  { page: "create", label: "Create", icon: <Plus size={18} strokeWidth={2.4} /> },
+  { page: "wallet", label: "Wallet", icon: <Wallet size={18} strokeWidth={2.4} /> },
+  { page: "rooms", label: "Match Rooms", icon: <Bot size={18} strokeWidth={2.4} /> },
+  { page: "profile", label: "Profile", icon: <UserRound size={18} strokeWidth={2.4} /> },
+  { page: "history", label: "History", icon: <History size={18} strokeWidth={2.4} /> },
 ];
+
+const navIconClass =
+  "grid size-9 place-items-center rounded-xl bg-lime-50 text-black/70 transition group-hover:bg-lime-100 group-hover:text-black";
+const navIconActiveClass = "bg-lime-200 text-black";
+const navIconCompactClass =
+  "grid size-8 place-items-center rounded-full bg-lime-50 text-black/70 transition group-hover:bg-lime-100 group-hover:text-black";
 
 function BrandMark({ size = "md" }: { size?: "sm" | "md" | "lg" }) {
   const dimensions = size === "lg" ? "size-28" : size === "sm" ? "size-9" : "size-10";
@@ -170,9 +173,9 @@ function Sidebar() {
           <button
             key={item.page}
             onClick={() => setPage(item.page)}
-            className={`flex items-center gap-3 rounded-lg bg-white px-3 py-3 text-left text-sm transition ${page === item.page ? "text-lime-600" : "text-black/80 hover:text-lime-600"}`}
+            className={`group flex items-center gap-3 rounded-lg bg-white px-3 py-3 text-left text-sm transition ${page === item.page ? "text-lime-600" : "text-black/80 hover:text-lime-600"}`}
           >
-            {item.icon}
+            <span className={`${navIconClass} ${page === item.page ? navIconActiveClass : ""}`}>{item.icon}</span>
             {item.label}
           </button>
         ))}
@@ -196,8 +199,8 @@ function TopNav() {
   }, [isDarkTheme]);
 
   return (
-    <header className="top-nav-bar border-b border-transparent bg-white/95 px-4 py-3 backdrop-blur">
-      <div className="flex items-center justify-between gap-3">
+    <header className="top-nav-bar border-b border-transparent bg-white/95 px-0 py-3 backdrop-blur">
+      <div className="flex items-center justify-between gap-3 px-4">
         <button onClick={() => setPage("landing")} className="flex items-center gap-2 font-black lg:hidden">
           <BrandMark size="sm" /> Vsports
         </button>
@@ -223,12 +226,19 @@ function TopNav() {
           )}
         </div>
       </div>
-      <div className="no-scrollbar mt-3 flex gap-2 overflow-x-auto lg:hidden">
-        {navItems.slice(0, 6).map((item) => (
-          <button key={item.page} onClick={() => setPage(item.page)} className={`inline-flex min-w-max items-center gap-2 rounded-full border border-transparent bg-white px-3 py-2 text-xs ${page === item.page ? "text-lime-600" : "text-black/80"}`}>
-            {item.icon}{item.label}
-          </button>
-        ))}
+      <div className="mt-3 lg:hidden">
+        <div className="no-scrollbar flex gap-2 overflow-x-auto">
+          {navItems.slice(0, 6).map((item) => (
+            <button
+              key={item.page}
+              onClick={() => setPage(item.page)}
+              className={`group inline-flex min-w-max items-center gap-2 rounded-full border border-transparent bg-white px-3 py-2 text-xs ${page === item.page ? "text-lime-600" : "text-black/80"}`}
+            >
+              <span className={`${navIconCompactClass} ${page === item.page ? navIconActiveClass : ""}`}>{item.icon}</span>
+              {item.label}
+            </button>
+          ))}
+        </div>
       </div>
     </header>
   );
@@ -477,7 +487,7 @@ function Dashboard() {
   if (!user) return <AuthGate />;
   const userTx = transactions.filter((tx) => tx.userId === user.id).slice(0, 5);
   return (
-    <div className="grid gap-5">
+    <div className="marketplace-page grid gap-5">
       <div className="grid gap-4 lg:grid-cols-[1fr_340px]">
         <div className="glass rounded-xl p-5">
           <div className="flex flex-wrap items-center justify-between gap-3">
@@ -523,7 +533,7 @@ function AuthGate() {
 }
 
 function Stat({ label, value }: { label: string; value: ReactNode }) {
-  return <div className="rounded-lg border border-transparent bg-[#f6f6f2] p-4"><p className="text-sm text-black/60">{label}</p><p className="mt-1 text-2xl font-black">{value}</p></div>;
+  return <div className="stat-card rounded-lg border border-transparent bg-[#f6f6f2] p-4"><p className="text-sm text-black/60">{label}</p><p className="mt-1 text-2xl font-black">{value}</p></div>;
 }
 
 function Panel({ title, icon, children }: { title: string; icon: ReactNode; children: ReactNode }) {
@@ -621,7 +631,7 @@ function Marketplace() {
       .sort((a, b) => (filter.sort === "highest" ? b.prizePool - a.prizePool : 0));
   }, [challenges, filter]);
   return (
-    <div className="grid gap-5">
+    <div className="dashboard-page grid gap-5">
       <div className="flex flex-wrap items-end justify-between gap-4">
         <div><h2 className="text-3xl font-black">Marketplace</h2><p className="text-black/60">Each proposition stake is paid by both players. Escrow output is stake x 2.</p></div>
         <div className="grid grid-cols-2 gap-2 sm:grid-cols-4">
@@ -1057,7 +1067,7 @@ function WalletPage() {
 
 function TransactionTable({ transactions }: { transactions: { id: string; type: string; amount: number; status: string; description: string; createdAt: string }[] }) {
   return (
-    <section className="glass overflow-hidden rounded-xl">
+    <section className="transactions-panel glass overflow-hidden rounded-xl">
       <div className="border-b border-transparent p-4 font-bold">Recent transactions</div>
       <div className="no-scrollbar overflow-x-auto">
         <table className="w-full min-w-[680px] text-left text-sm">
