@@ -568,7 +568,7 @@ function ClubLogoPair() {
           key={logo.alt}
           src={logo.src}
           alt={logo.alt}
-          className="size-12 rounded-full bg-white object-cover ring-2 ring-[#f6f6f2]"
+          className="size-10 rounded-full bg-white object-cover ring-2 ring-[#f6f6f2]"
         />
       ))}
     </div>
