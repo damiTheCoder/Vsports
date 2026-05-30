@@ -11,9 +11,11 @@ import {
   Medal,
   MessageSquare,
   Mic,
+  Moon,
   Plus,
   Send,
   ShieldCheck,
+  Sun,
   Swords,
   Upload,
   UserRound,
@@ -184,14 +186,32 @@ function TopNav() {
   const page = useAppStore((state) => state.page);
   const setPage = useAppStore((state) => state.setPage);
   const logout = useAppStore((state) => state.logout);
+  const [isDarkTheme, setIsDarkTheme] = useState(() => {
+    return window.localStorage.getItem("vsports-theme") === "dark";
+  });
+
+  useEffect(() => {
+    document.documentElement.classList.toggle("dark-theme", isDarkTheme);
+    window.localStorage.setItem("vsports-theme", isDarkTheme ? "dark" : "light");
+  }, [isDarkTheme]);
+
   return (
-    <header className="sticky top-0 z-20 border-b border-transparent bg-white/95 px-4 py-3 backdrop-blur">
+    <header className="border-b border-transparent bg-white/95 px-4 py-3 backdrop-blur">
       <div className="flex items-center justify-between gap-3">
         <button onClick={() => setPage("landing")} className="flex items-center gap-2 font-black lg:hidden">
           <BrandMark size="sm" /> Vsports
         </button>
         <div className="hidden text-sm text-black/60 lg:block">Real-money DLS challenge prototype using mock escrow and AI verification</div>
         <div className="flex items-center gap-2">
+          <button
+            type="button"
+            onClick={() => setIsDarkTheme((current) => !current)}
+            className="grid size-11 place-items-center rounded-lg bg-lime-50 text-black transition hover:bg-lime-100"
+            aria-label={isDarkTheme ? "Switch to white theme" : "Switch to black theme"}
+            title={isDarkTheme ? "White theme" : "Black theme"}
+          >
+            {isDarkTheme ? <Sun size={18} /> : <Moon size={18} />}
+          </button>
           {currentUser ? (
             <>
               <span className="hidden text-sm text-black/80 sm:block">{currentUser.username}</span>
@@ -214,12 +234,39 @@ function TopNav() {
   );
 }
 
+function TopBanner() {
+  const bannerImages = ["/k8.jpeg", "/k9.jpeg", "/K3.jpeg", "/K.jpeg"];
+  const [activeBanner, setActiveBanner] = useState(0);
+
+  useEffect(() => {
+    const timer = window.setInterval(() => {
+      setActiveBanner((current) => (current + 1) % bannerImages.length);
+    }, 10000);
+
+    return () => window.clearInterval(timer);
+  }, [bannerImages.length]);
+
+  return (
+    <div className="relative h-20 w-full overflow-hidden sm:h-24 lg:h-28">
+      <img
+        src={bannerImages[activeBanner]}
+        alt="Football banner"
+        className="size-full object-cover object-[center_18%]"
+      />
+      <div className="pointer-events-none absolute inset-x-0 bottom-0 h-10 bg-gradient-to-b from-transparent to-white" />
+    </div>
+  );
+}
+
 function AppLayout({ children }: { children: ReactNode }) {
   return (
     <div className="min-h-screen lg:grid lg:grid-cols-[260px_1fr]">
       <Sidebar />
       <div>
-        <TopNav />
+        <div className="sticky top-0 z-20 bg-white">
+          <TopBanner />
+          <TopNav />
+        </div>
         <main className="mx-auto w-full max-w-7xl px-3 py-4 sm:px-4 lg:px-5">{children}</main>
       </div>
     </div>
@@ -1012,7 +1059,7 @@ function TransactionTable({ transactions }: { transactions: { id: string; type: 
   return (
     <section className="glass overflow-hidden rounded-xl">
       <div className="border-b border-transparent p-4 font-bold">Recent transactions</div>
-      <div className="overflow-x-auto">
+      <div className="no-scrollbar overflow-x-auto">
         <table className="w-full min-w-[680px] text-left text-sm">
           <thead className="bg-lime-50 text-black/60"><tr><th className="p-3">Type</th><th className="p-3">Amount</th><th className="p-3">Status</th><th className="p-3">Description</th><th className="p-3">Created</th></tr></thead>
           <tbody>{transactions.map((tx) => <tr key={tx.id} className="border-t border-transparent"><td className="p-3">{tx.type}</td><td className={`p-3 font-bold ${tx.amount >= 0 ? "text-lime-600" : "text-red-600"}`}>{formatMoney(tx.amount)}</td><td className="p-3">{tx.status}</td><td className="p-3 text-black/60">{tx.description}</td><td className="p-3 text-black/50">{new Date(tx.createdAt).toLocaleDateString()}</td></tr>)}</tbody>
