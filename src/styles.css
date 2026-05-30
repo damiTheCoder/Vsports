@@ -29,12 +29,22 @@
   background: #ffffff;
 }
 
+:root.dark-theme {
+  color-scheme: dark;
+  background: #050505;
+}
+
 body {
   margin: 0;
   min-width: 320px;
   min-height: 100vh;
   background: #ffffff;
   color: #050505;
+}
+
+:root.dark-theme body {
+  background: #050505;
+  color: #f8f8f2;
 }
 
 button,
@@ -91,4 +101,66 @@ img {
 .no-scrollbar {
   -ms-overflow-style: none;
   scrollbar-width: none;
+}
+
+:root.dark-theme .glass,
+:root.dark-theme .brand-panel,
+:root.dark-theme .listed-game-card,
+:root.dark-theme [class*="bg-white"],
+:root.dark-theme [class*="bg-[#f6f6f2]"] {
+  background-color: #101010 !important;
+}
+
+:root.dark-theme [class*="bg-lime-50"],
+:root.dark-theme [class*="bg-lime-100"],
+:root.dark-theme [class*="bg-lime-200"] {
+  background-color: #17210c !important;
+}
+
+:root.dark-theme [class*="text-black"] {
+  color: rgba(248, 248, 242, 0.9) !important;
+}
+
+:root.dark-theme [class*="text-black/60"],
+:root.dark-theme [class*="text-black/65"],
+:root.dark-theme [class*="text-black/70"],
+:root.dark-theme [class*="text-black/80"] {
+  color: rgba(248, 248, 242, 0.68) !important;
+}
+
+:root.dark-theme [class*="text-black/40"],
+:root.dark-theme [class*="text-black/45"],
+:root.dark-theme [class*="text-black/50"] {
+  color: rgba(248, 248, 242, 0.5) !important;
+}
+
+:root.dark-theme .bg-lime-400,
+:root.dark-theme .bg-lime-300,
+:root.dark-theme .bg-lime-400 [class*="text-black"],
+:root.dark-theme .bg-lime-300 [class*="text-black"] {
+  color: #050505 !important;
+}
+
+:root.dark-theme input,
+:root.dark-theme select,
+:root.dark-theme textarea {
+  background-color: #17210c !important;
+  color: #f8f8f2 !important;
+}
+
+:root.dark-theme input::placeholder,
+:root.dark-theme textarea::placeholder {
+  color: rgba(248, 248, 242, 0.45) !important;
+}
+
+:root.dark-theme table {
+  color: #f8f8f2;
+}
+
+:root.dark-theme thead {
+  background-color: #17210c !important;
+}
+
+:root.dark-theme .to-white {
+  --tw-gradient-to: #050505 var(--tw-gradient-to-position);
 }
