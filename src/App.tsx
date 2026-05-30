@@ -587,7 +587,7 @@ function ChallengeCard({ challenge }: { challenge: Challenge }) {
         <div className="flex items-center gap-3">
           <ClubLogoPair />
           <div>
-            <h3 className="text-xl font-black">{creator?.username} 1v1 Proposition</h3>
+            <h3 className="text-[clamp(1rem,4.8vw,1.25rem)] font-black leading-tight break-words">{creator?.username} 1v1 Proposition</h3>
             <p className="mt-1 text-sm text-black/60">Player offer · Man United vs Man City</p>
           </div>
         </div>
