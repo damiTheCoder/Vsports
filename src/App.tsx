@@ -399,54 +399,54 @@ function LandingPage() {
         </section>
 
         <section className="px-[7%] py-14">
-            <div className="flex items-center gap-4 border-t border-black/10 pt-4 text-xs">
-              <span className="grid size-7 place-items-center rounded-full border border-black/20">A</span>
-              <span>About</span>
+          <div className="flex items-center gap-4 border-t border-black/10 pt-4 text-xs">
+            <span className="grid size-7 place-items-center rounded-full border border-black/20">A</span>
+            <span>About</span>
+          </div>
+          <div className="mt-10 grid gap-8 lg:grid-cols-[1.1fr_0.9fr_0.9fr]">
+            <h2 className="text-4xl font-black uppercase leading-none sm:text-5xl">
+              The competition layer for trusted 1v1 football gaming
+            </h2>
+            <p className="text-sm leading-7 text-black/65">
+              Football gamers already compete through group chats and DMs, but payments, proof, disputes, and reputation are messy. Vsports gives every challenge a structured flow.
+            </p>
+            <div className="text-sm leading-7 text-black/65">
+              <p>Players create propositions, lock entries in escrow, share match codes, upload scoreboard screenshots, and let an AI-assisted referee explain the settlement path.</p>
+              <button onClick={() => setPage("marketplace")} className="mt-5 rounded-xl bg-black px-4 py-3 text-xs font-bold text-white">
+                Browse challenges <span className="ml-2 rounded-lg bg-lime-400 px-2 py-1 text-black">›</span>
+              </button>
             </div>
-            <div className="mt-10 grid gap-8 lg:grid-cols-[1.1fr_0.9fr_0.9fr]">
-              <h2 className="text-4xl font-black uppercase leading-none sm:text-5xl">
-                The competition layer for trusted 1v1 football gaming
-              </h2>
-              <p className="text-sm leading-7 text-black/65">
-                Football gamers already compete through group chats and DMs, but payments, proof, disputes, and reputation are messy. Vsports gives every challenge a structured flow.
-              </p>
-              <div className="text-sm leading-7 text-black/65">
-                <p>Players create propositions, lock entries in escrow, share match codes, upload scoreboard screenshots, and let an AI-assisted referee explain the settlement path.</p>
-                <button onClick={() => setPage("marketplace")} className="mt-5 rounded-xl bg-black px-4 py-3 text-xs font-bold text-white">
-                  Browse challenges <span className="ml-2 rounded-lg bg-lime-400 px-2 py-1 text-black">›</span>
-                </button>
-              </div>
-            </div>
-            <div className="mt-10 grid gap-8 lg:grid-cols-[1.15fr_0.85fr]">
-              <div className="relative overflow-hidden rounded-xl border border-black/15">
-                <img src="/K.jpeg" alt="Football player artwork" className="h-[520px] w-full object-cover" />
-                <div className="absolute bottom-0 left-0 right-0 grid grid-cols-[1fr_1fr_64px] bg-sky-950/80 text-white">
-                  <div className="p-4">
-                    <p className="text-2xl font-black text-lime-300">$5+</p>
-                    <p className="text-sm">Stake each</p>
-                  </div>
-                  <div className="p-4">
-                    <p className="text-2xl font-black text-lime-300">x2</p>
-                    <p className="text-sm">Escrow output</p>
-                  </div>
-                  <button onClick={() => setPage("marketplace")} className="grid place-items-center rounded-r-[10px] bg-sky-900 text-3xl">↗</button>
+          </div>
+          <div className="mt-10 grid gap-8 lg:grid-cols-[1.15fr_0.85fr]">
+            <div className="relative overflow-hidden rounded-xl border border-black/15">
+              <img src="/K.jpeg" alt="Football player artwork" className="h-[520px] w-full object-cover" />
+              <div className="absolute bottom-0 left-0 right-0 grid grid-cols-[1fr_1fr_64px] bg-sky-950/80 text-white">
+                <div className="p-4">
+                  <p className="text-2xl font-black text-lime-300">$5+</p>
+                  <p className="text-sm">Stake each</p>
                 </div>
-              </div>
-              <div className="grid content-between gap-6">
-                <img src="/K1.jpeg" alt="Football player artwork" className="h-72 w-full rounded-xl border border-black/15 object-cover" />
-                <div>
-                  <div className="flex items-end gap-4">
-                    <span className="text-8xl font-black text-lime-400">AI</span>
-                    <span className="pb-4 text-xl font-bold leading-tight">Referee<br />Room</span>
-                  </div>
-                  <ul className="mt-4 list-disc pl-5 text-sm leading-7 text-black/70">
-                    <li>AI-guided private match room</li>
-                    <li>Escrow output equals both entries</li>
-                    <li>Screenshot proof, trust scores, and fair-play penalties</li>
-                  </ul>
+                <div className="p-4">
+                  <p className="text-2xl font-black text-lime-300">x2</p>
+                  <p className="text-sm">Escrow output</p>
                 </div>
+                <button onClick={() => setPage("marketplace")} className="grid place-items-center rounded-r-[10px] bg-sky-900 text-3xl">↗</button>
               </div>
             </div>
+            <div className="grid content-between gap-6">
+              <img src="/K1.jpeg" alt="Football player artwork" className="h-72 w-full rounded-xl border border-black/15 object-cover" />
+              <div>
+                <div className="flex items-end gap-4">
+                  <span className="text-8xl font-black text-lime-400">AI</span>
+                  <span className="pb-4 text-xl font-bold leading-tight">Referee<br />Room</span>
+                </div>
+                <ul className="mt-4 list-disc pl-5 text-sm leading-7 text-black/70">
+                  <li>AI-guided private match room</li>
+                  <li>Escrow output equals both entries</li>
+                  <li>Screenshot proof, trust scores, and fair-play penalties</li>
+                </ul>
+              </div>
+            </div>
+          </div>
         </section>
 
         <section className="relative overflow-hidden px-[7%] py-14">
@@ -894,10 +894,10 @@ function Marketplace() {
           <div className="no-scrollbar min-w-0 overflow-x-auto lg:col-span-3 lg:overflow-visible">
             <div className="min-w-[410px] lg:min-w-0">
               <div className="marketplace-list-header grid grid-cols-[96px_104px_150px] items-center gap-3 px-5 py-2 text-xs font-bold uppercase tracking-wide text-black/50 lg:grid-cols-3">
-              <span>Stake</span>
-              <span>Escrow</span>
-              <span>Window</span>
-            </div>
+                <span>Stake</span>
+                <span>Escrow</span>
+                <span>Window</span>
+              </div>
               {filtered.map((challenge, index) => (
                 <ChallengeListMetricsRow key={challenge.id} challenge={challenge} isLast={index === filtered.length - 1} />
               ))}
