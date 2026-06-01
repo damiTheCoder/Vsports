@@ -2,10 +2,11 @@ import {
   BadgeDollarSign,
   Bot,
   CheckCircle2,
+  ChevronDown,
   Clock3,
-  Coins,
   Gavel,
   History,
+  LayoutGrid,
   LogIn,
   Mic,
   Moon,
@@ -46,7 +47,42 @@ const navIconClass =
   "grid size-9 place-items-center rounded-xl bg-lime-50 text-black/70 transition group-hover:bg-lime-100 group-hover:text-black";
 const navIconActiveClass = "bg-lime-200 text-black";
 const navIconCompactClass =
-  "grid size-8 place-items-center rounded-full bg-lime-50 text-black/70 transition group-hover:bg-lime-100 group-hover:text-black";
+  "grid size-7 place-items-center rounded-full bg-lime-50 text-black/70 transition group-hover:bg-lime-100 group-hover:text-black";
+
+const propositionTeams: Record<string, { logoSrc: string; teamName: string }> = {
+  ch_1: {
+    logoSrc: "/New%20Manchester%20City%20Crest%20Revealed.jpeg",
+    teamName: "Manchester City",
+  },
+  ch_2: {
+    logoSrc: "/Manchester%20United%20Logo%20and%20symbol,%20meaning,%20history,%20PNG,%20brand.jpeg",
+    teamName: "Manchester United",
+  },
+  ch_3: {
+    logoSrc: "/Real%20Madrid%20_.jpeg",
+    teamName: "Real Madrid",
+  },
+  ch_4: {
+    logoSrc: "/Barca.jpeg",
+    teamName: "Barcelona",
+  },
+  ch_5: {
+    logoSrc: "/FC%20Bayern%20Munich.jpeg",
+    teamName: "Bayern Munich",
+  },
+  ch_6: {
+    logoSrc: "/Liverpool%20Football%20Club.jpeg",
+    teamName: "Liverpool",
+  },
+  ch_7: {
+    logoSrc: "/chelsea%20fc%20logo%20-%20Google%20Search.jpeg",
+    teamName: "Chelsea",
+  },
+};
+
+function propositionTeamFor(challengeId: string) {
+  return propositionTeams[challengeId] ?? propositionTeams.ch_2;
+}
 
 function BrandMark({ size = "md" }: { size?: "sm" | "md" | "lg" }) {
   const dimensions = size === "lg" ? "size-28" : size === "sm" ? "size-9" : "size-10";
@@ -82,7 +118,7 @@ function Button({
       type={type}
       disabled={disabled}
       onClick={onClick}
-      className={`inline-flex min-h-11 items-center justify-center gap-2 rounded-lg px-4 py-2 text-sm font-bold transition disabled:opacity-50 ${styles[variant]}`}
+      className={`inline-flex min-h-10 items-center justify-center gap-2 rounded-xl px-3 py-2 text-sm font-bold transition disabled:opacity-50 sm:min-h-11 sm:px-4 ${styles[variant]}`}
     >
       {children}
     </button>
@@ -108,6 +144,35 @@ function inputClass() {
   return "min-h-11 rounded-lg border border-transparent bg-lime-50 px-3 text-black outline-none transition focus:bg-lime-50";
 }
 
+function SelectControl({
+  value,
+  onChange,
+  options,
+}: {
+  value: string;
+  onChange: (value: string) => void;
+  options: { value: string; label: string }[];
+}) {
+  return (
+    <label className="relative block min-w-0">
+      <select
+        className="min-h-11 w-full appearance-none rounded-xl border border-transparent bg-lime-50 py-2 pl-3 pr-10 text-black outline-none transition focus:bg-lime-100"
+        value={value}
+        onChange={(event) => onChange(event.target.value)}
+      >
+        {options.map((option) => (
+          <option key={option.value} value={option.value}>
+            {option.label}
+          </option>
+        ))}
+      </select>
+      <span className="pointer-events-none absolute right-2 top-1/2 grid size-7 -translate-y-1/2 place-items-center rounded-full bg-white/70 text-black">
+        <ChevronDown size={16} strokeWidth={2.5} />
+      </span>
+    </label>
+  );
+}
+
 function TrustScoreBadge({ score }: { score: number }) {
   const color = score >= 90 ? "text-lime-600 border-transparent" : score >= 75 ? "text-black border-transparent" : "text-red-600 border-transparent";
   return <span className={`rounded-full border px-3 py-1 text-xs font-bold ${color}`}>Trust {score}</span>;
@@ -121,18 +186,25 @@ function WalletCard({ user }: { user: User }) {
   return (
     <div className="glass rounded-xl p-4">
       <div className="flex items-center justify-between">
-        <div>
+        <div className="min-w-0">
           <p className="text-sm text-black/60">Available wallet</p>
-          <p className="mt-1 text-2xl font-black">{formatMoney(user.walletBalance)}</p>
+          <p className="mt-1 truncate text-2xl font-black">{formatMoney(user.walletBalance)}</p>
         </div>
-        <Coins className="text-lime-600" />
+        <div className="relative size-12 shrink-0">
+          <img src="/usdc.png" alt="USDC" className="size-12 rounded-full object-cover" />
+          <img
+            src="/z3.png"
+            alt=""
+            className="absolute -bottom-1 -right-1 size-6 rounded-full object-cover ring-2 ring-white"
+          />
+        </div>
       </div>
       <div className="mt-4 grid grid-cols-2 gap-3 text-sm">
-        <div className="rounded-lg bg-[#f6f6f2] p-3">
+        <div className="wallet-mini-stat rounded-lg bg-[#f6f6f2] p-3">
           <p className="text-black/60">Escrow</p>
           <p className="font-bold text-black">{formatMoney(user.escrowBalance)}</p>
         </div>
-        <div className="rounded-lg bg-[#f6f6f2] p-3">
+        <div className="wallet-mini-stat rounded-lg bg-[#f6f6f2] p-3">
           <p className="text-black/60">Record</p>
           <p className="font-bold">{user.wins}W / {user.losses}L</p>
         </div>
@@ -199,17 +271,16 @@ function TopNav() {
   }, [isDarkTheme]);
 
   return (
-    <header className="top-nav-bar border-b border-transparent bg-white/95 px-0 py-3 backdrop-blur">
-      <div className="flex items-center justify-between gap-3 px-4">
-        <button onClick={() => setPage("landing")} className="flex items-center gap-2 font-black lg:hidden">
+    <header className="top-nav-bar border-b border-transparent bg-white/95 px-0 pb-1 pt-2 backdrop-blur sm:py-3">
+      <div className="flex items-center justify-between gap-2 px-3 sm:gap-3 sm:px-4">
+        <button onClick={() => setPage("landing")} className="flex min-w-0 items-center gap-2 font-black">
           <BrandMark size="sm" /> Vsports
         </button>
-        <div className="hidden text-sm text-black/60 lg:block">Real-money DLS challenge prototype using mock escrow and AI verification</div>
-        <div className="flex items-center gap-2">
+        <div className="flex shrink-0 items-center gap-1.5 sm:gap-2">
           <button
             type="button"
             onClick={() => setIsDarkTheme((current) => !current)}
-            className="grid size-11 place-items-center rounded-lg bg-lime-50 text-black transition hover:bg-lime-100"
+            className="grid size-10 place-items-center rounded-lg bg-lime-50 text-black transition hover:bg-lime-100 sm:size-11"
             aria-label={isDarkTheme ? "Switch to white theme" : "Switch to black theme"}
             title={isDarkTheme ? "White theme" : "Black theme"}
           >
@@ -226,13 +297,13 @@ function TopNav() {
           )}
         </div>
       </div>
-      <div className="mt-3 lg:hidden">
-        <div className="no-scrollbar flex gap-2 overflow-x-auto">
+      <div className="mt-2">
+        <div className="no-scrollbar flex gap-1.5 overflow-x-auto px-3 sm:gap-2 sm:px-4">
           {navItems.slice(0, 6).map((item) => (
             <button
               key={item.page}
               onClick={() => setPage(item.page)}
-              className={`group inline-flex min-w-max items-center gap-2 rounded-full border border-transparent bg-white px-3 py-2 text-xs ${page === item.page ? "text-lime-600" : "text-black/80"}`}
+              className={`group inline-flex min-w-max items-center gap-2 rounded-full border border-transparent bg-white px-2.5 py-1.5 text-xs ${page === item.page ? "text-lime-600" : "text-black/80"}`}
             >
               <span className={`${navIconCompactClass} ${page === item.page ? navIconActiveClass : ""}`}>{item.icon}</span>
               {item.label}
@@ -270,14 +341,13 @@ function TopBanner() {
 
 function AppLayout({ children }: { children: ReactNode }) {
   return (
-    <div className="app-shell min-h-screen lg:grid lg:grid-cols-[260px_1fr]">
-      <Sidebar />
-      <div className="app-content">
+    <div className="app-shell min-h-screen">
+      <div className="app-content min-w-0">
         <div className="app-header-stack sticky top-0 z-20 bg-white">
           <TopBanner />
           <TopNav />
         </div>
-        <main className="mx-auto w-full max-w-7xl px-3 py-4 sm:px-4 lg:px-5">{children}</main>
+        <main className="mx-auto min-w-0 max-w-7xl px-3 py-4 sm:px-4 lg:px-5">{children}</main>
       </div>
     </div>
   );
@@ -295,7 +365,7 @@ function LandingPage() {
     <div className="min-h-screen bg-white">
       <div className="grid gap-0 bg-white">
         <section className="relative mt-0 min-h-screen overflow-hidden bg-sky-500">
-          <img src="/k5.jpeg" alt="Football player artwork" className="absolute inset-0 size-full object-cover" />
+          <img src="/k5.png" alt="Football player artwork" className="absolute inset-0 size-full object-cover" />
           <div className="absolute inset-0 bg-sky-500/25" />
           <div className="pointer-events-none absolute inset-x-0 bottom-0 h-44 bg-gradient-to-b from-transparent via-white/70 to-white" />
           <div className="relative z-10 flex min-h-screen flex-col p-5 sm:p-7 lg:p-9">
@@ -305,10 +375,10 @@ function LandingPage() {
                 <span className="text-sm font-bold">Vsports</span>
               </div>
               <div className="flex items-center gap-2">
-                <button onClick={() => setPage("login")} className="bg-white px-4 py-2 text-xs font-bold text-black">
-                  Login <span className="ml-2 bg-lime-400 px-2 py-1">›</span>
+                <button onClick={() => setPage("login")} className="rounded-xl bg-white px-4 py-2 text-xs font-bold text-black">
+                  Login <span className="ml-2 rounded-lg bg-lime-400 px-2 py-1">›</span>
                 </button>
-                <button onClick={() => setPage("register")} className="hidden bg-lime-400 px-4 py-2 text-xs font-bold text-black sm:block">
+                <button onClick={() => setPage("register")} className="hidden rounded-xl bg-lime-400 px-4 py-2 text-xs font-bold text-black sm:block">
                   Sign up
                 </button>
               </div>
@@ -329,52 +399,67 @@ function LandingPage() {
         </section>
 
         <section className="px-[7%] py-14">
-          <div className="flex items-center gap-4 border-t border-black/10 pt-4 text-xs">
-            <span className="grid size-7 place-items-center rounded-full border border-black/20">A</span>
-            <span>About</span>
-          </div>
-          <div className="mt-10 grid gap-8 lg:grid-cols-[1.1fr_0.9fr_0.9fr]">
-            <h2 className="text-4xl font-black uppercase leading-none sm:text-5xl">
-              The competition layer for trusted 1v1 football gaming
-            </h2>
-            <p className="text-sm leading-7 text-black/65">
-              Football gamers already compete through group chats and DMs, but payments, proof, disputes, and reputation are messy. Vsports gives every challenge a structured flow.
-            </p>
-            <div className="text-sm leading-7 text-black/65">
-              <p>Players create propositions, lock entries in escrow, share match codes, upload scoreboard screenshots, and let an AI-assisted referee explain the settlement path.</p>
-              <button onClick={() => setPage("marketplace")} className="mt-5 bg-black px-4 py-3 text-xs font-bold text-white">
-                Browse challenges <span className="ml-2 bg-lime-400 px-2 py-1 text-black">›</span>
-              </button>
+            <div className="flex items-center gap-4 border-t border-black/10 pt-4 text-xs">
+              <span className="grid size-7 place-items-center rounded-full border border-black/20">A</span>
+              <span>About</span>
             </div>
-          </div>
-          <div className="mt-10 grid gap-8 lg:grid-cols-[1.15fr_0.85fr]">
-            <div className="relative overflow-hidden">
-              <img src="/K.jpeg" alt="Football player artwork" className="h-[520px] w-full object-cover" />
-              <div className="absolute bottom-0 left-0 right-0 grid grid-cols-[1fr_1fr_64px] bg-sky-950/80 text-white">
-                <div className="p-4">
-                  <p className="text-2xl font-black text-lime-300">$5+</p>
-                  <p className="text-sm">Stake each</p>
-                </div>
-                <div className="p-4">
-                  <p className="text-2xl font-black text-lime-300">x2</p>
-                  <p className="text-sm">Escrow output</p>
-                </div>
-                <button onClick={() => setPage("marketplace")} className="grid place-items-center bg-sky-900 text-3xl">↗</button>
+            <div className="mt-10 grid gap-8 lg:grid-cols-[1.1fr_0.9fr_0.9fr]">
+              <h2 className="text-4xl font-black uppercase leading-none sm:text-5xl">
+                The competition layer for trusted 1v1 football gaming
+              </h2>
+              <p className="text-sm leading-7 text-black/65">
+                Football gamers already compete through group chats and DMs, but payments, proof, disputes, and reputation are messy. Vsports gives every challenge a structured flow.
+              </p>
+              <div className="text-sm leading-7 text-black/65">
+                <p>Players create propositions, lock entries in escrow, share match codes, upload scoreboard screenshots, and let an AI-assisted referee explain the settlement path.</p>
+                <button onClick={() => setPage("marketplace")} className="mt-5 rounded-xl bg-black px-4 py-3 text-xs font-bold text-white">
+                  Browse challenges <span className="ml-2 rounded-lg bg-lime-400 px-2 py-1 text-black">›</span>
+                </button>
               </div>
             </div>
-            <div className="grid content-between gap-6">
-              <img src="/K1.jpeg" alt="Football player artwork" className="h-72 w-full object-cover" />
-              <div>
-                <div className="flex items-end gap-4">
-                  <span className="text-8xl font-black text-lime-400">AI</span>
-                  <span className="pb-4 text-xl font-bold leading-tight">Referee<br />Room</span>
+            <div className="mt-10 grid gap-8 lg:grid-cols-[1.15fr_0.85fr]">
+              <div className="relative overflow-hidden rounded-xl border border-black/15">
+                <img src="/K.jpeg" alt="Football player artwork" className="h-[520px] w-full object-cover" />
+                <div className="absolute bottom-0 left-0 right-0 grid grid-cols-[1fr_1fr_64px] bg-sky-950/80 text-white">
+                  <div className="p-4">
+                    <p className="text-2xl font-black text-lime-300">$5+</p>
+                    <p className="text-sm">Stake each</p>
+                  </div>
+                  <div className="p-4">
+                    <p className="text-2xl font-black text-lime-300">x2</p>
+                    <p className="text-sm">Escrow output</p>
+                  </div>
+                  <button onClick={() => setPage("marketplace")} className="grid place-items-center rounded-r-[10px] bg-sky-900 text-3xl">↗</button>
                 </div>
-                <ul className="mt-4 list-disc pl-5 text-sm leading-7 text-black/70">
-                  <li>AI-guided private match room</li>
-                  <li>Escrow output equals both entries</li>
-                  <li>Screenshot proof, trust scores, and fair-play penalties</li>
-                </ul>
               </div>
+              <div className="grid content-between gap-6">
+                <img src="/K1.jpeg" alt="Football player artwork" className="h-72 w-full rounded-xl border border-black/15 object-cover" />
+                <div>
+                  <div className="flex items-end gap-4">
+                    <span className="text-8xl font-black text-lime-400">AI</span>
+                    <span className="pb-4 text-xl font-bold leading-tight">Referee<br />Room</span>
+                  </div>
+                  <ul className="mt-4 list-disc pl-5 text-sm leading-7 text-black/70">
+                    <li>AI-guided private match room</li>
+                    <li>Escrow output equals both entries</li>
+                    <li>Screenshot proof, trust scores, and fair-play penalties</li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+        </section>
+
+        <section className="relative overflow-hidden px-[7%] py-14">
+          <img src="/b5.png" alt="" className="absolute inset-0 size-full object-cover" />
+          <div className="absolute inset-0 bg-white/82" />
+          <div className="pointer-events-none absolute inset-x-0 bottom-0 h-36 bg-gradient-to-b from-transparent to-white" />
+          <div className="relative z-10">
+            <div className="gradient-image-border">
+              <img
+                src="/R4.png"
+                alt="Vsports match preview"
+                className="w-full rounded-[10px] object-cover"
+              />
             </div>
           </div>
         </section>
@@ -386,22 +471,22 @@ function LandingPage() {
           </div>
           <h2 className="mt-10 max-w-3xl text-4xl font-black uppercase leading-none sm:text-5xl">From challenge to settlement in one flow.</h2>
           <div className="mt-10 grid gap-4 lg:grid-cols-3">
-            <div className="overflow-hidden bg-[#f6f6f2]">
+            <div className="overflow-hidden rounded-xl border border-black/15 bg-[#f6f6f2]">
               <img src="/K3.jpeg" alt="Football player artwork" className="h-72 w-full object-cover" />
               <p className="p-4 text-xl font-bold">Create a challenge</p>
             </div>
-            <div className="overflow-hidden bg-[#f6f6f2]">
+            <div className="overflow-hidden rounded-xl border border-black/15 bg-[#f6f6f2]">
               <img src="/k4.jpeg" alt="Football player artwork" className="h-72 w-full object-cover" />
               <p className="p-4 text-xl font-bold">Accept and lock escrow</p>
             </div>
-            <div className="overflow-hidden bg-[#f6f6f2]">
+            <div className="overflow-hidden rounded-xl border border-black/15 bg-[#f6f6f2]">
               <img src="/k7.jpeg" alt="Football player artwork" className="h-72 w-full object-cover" />
               <p className="p-4 text-xl font-bold">Upload proof and settle</p>
             </div>
           </div>
           <div className="mt-8 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
             {features.map(([title, text]) => (
-              <div key={title} className="bg-[#f6f6f2] p-5">
+              <div key={title} className="rounded-xl border border-black/15 bg-[#f6f6f2] p-5">
                 <p className="text-2xl font-bold">{title}</p>
                 <p className="mt-3 text-sm leading-6 text-black/60">{text}</p>
               </div>
@@ -487,27 +572,33 @@ function Dashboard() {
   if (!user) return <AuthGate />;
   const userTx = transactions.filter((tx) => tx.userId === user.id).slice(0, 5);
   return (
-    <div className="marketplace-page grid gap-5">
-      <div className="grid gap-4 lg:grid-cols-[1fr_340px]">
-        <div className="glass rounded-xl p-5">
-          <div className="flex flex-wrap items-center justify-between gap-3">
-            <div>
+    <div className="marketplace-page grid min-w-0 gap-5">
+      <div className="grid min-w-0 gap-4 lg:grid-cols-[1fr_340px]">
+        <div className="glass rounded-xl p-4 sm:p-5">
+          <div className="flex items-start justify-between gap-3">
+            <div className="min-w-0">
               <p className="text-sm text-black/60">Player profile</p>
-              <h2 className="text-3xl font-black">{user.username}</h2>
+              <h2 className="flex min-w-0 items-center gap-2 text-[clamp(2rem,11vw,3rem)] font-black leading-none sm:text-3xl">
+                <span className="truncate">{user.username}</span>
+                <img src="/checklist.png" alt="Verified" className="size-6 rounded-full object-cover" />
+              </h2>
               <p className="text-black/60">{user.country} · Verification mock-active</p>
             </div>
             <TrustScoreBadge score={user.trustScore} />
           </div>
-          <div className="mt-6 grid gap-3 sm:grid-cols-4">
-            <Stat label="Total matches" value={user.wins + user.losses} />
-            <Stat label="Wins" value={user.wins} />
-            <Stat label="Losses" value={user.losses} />
-            <Stat label="Penalties" value={user.penalties} />
-          </div>
+          <DashboardStatStrip
+            stats={[
+              ["Total matches", user.wins + user.losses],
+              ["Wins", user.wins],
+              ["Losses", user.losses],
+              ["Penalties", user.penalties],
+            ]}
+          />
         </div>
         <WalletCard user={user} />
       </div>
-      <div className="grid gap-4 lg:grid-cols-2">
+      <TransactionTable transactions={userTx} />
+      <div className="grid min-w-0 gap-4 lg:grid-cols-2">
         <Panel title="Active challenges" icon={<Swords size={18} />}>
           {challenges.filter((challenge) => challenge.creatorId === user.id || challenge.opponentId === user.id).slice(0, 4).map((challenge) => <ChallengeRow key={challenge.id} challenge={challenge} />)}
         </Panel>
@@ -516,7 +607,6 @@ function Dashboard() {
           {rooms.length === 0 && <p className="text-sm text-black/60">No active rooms yet. Accept or create a challenge to start.</p>}
         </Panel>
       </div>
-      <TransactionTable transactions={userTx} />
     </div>
   );
 }
@@ -536,6 +626,54 @@ function Stat({ label, value }: { label: string; value: ReactNode }) {
   return <div className="stat-card rounded-lg border border-transparent bg-[#f6f6f2] p-4"><p className="text-sm text-black/60">{label}</p><p className="mt-1 text-2xl font-black">{value}</p></div>;
 }
 
+function DashboardStatStrip({ stats }: { stats: [string, ReactNode][] }) {
+  return (
+    <div className="dashboard-stat-strip mt-6 grid grid-cols-4 overflow-hidden rounded-xl bg-[#f6f6f2] sm:gap-3 sm:overflow-visible sm:rounded-none sm:bg-transparent">
+      {stats.map(([label, value], index) => (
+        <div
+          key={label}
+          className={`dashboard-stat-item min-w-0 px-1.5 py-3 text-center sm:rounded-lg sm:border sm:border-transparent sm:bg-[#f6f6f2] sm:p-4 sm:text-left ${index > 0 ? "border-l border-black/20" : ""}`}
+        >
+          <p className="truncate text-[9px] leading-tight text-black/60 min-[380px]:text-[10px] sm:text-sm">{label}</p>
+          <p className="mt-1 text-base font-black leading-none min-[380px]:text-lg sm:text-2xl">{value}</p>
+        </div>
+      ))}
+    </div>
+  );
+}
+
+function WalletStatStrip({ stats }: { stats: [string, ReactNode][] }) {
+  return (
+    <div className="mt-6 grid grid-cols-2 overflow-hidden rounded-xl bg-[#f6f6f2] sm:grid-cols-4 sm:gap-3 sm:overflow-visible sm:rounded-none sm:bg-transparent">
+      {stats.map(([label, value], index) => (
+        <div
+          key={label}
+          className={`dashboard-stat-item min-w-0 px-2 py-3 text-center sm:rounded-lg sm:border sm:border-transparent sm:bg-[#f6f6f2] sm:p-4 sm:text-left ${index > 0 ? "border-l border-black/20" : ""}`}
+        >
+          <p className="truncate text-[10px] leading-tight text-black/60 sm:text-sm">{label}</p>
+          <p className="mt-1 text-base font-black leading-none min-[380px]:text-lg sm:text-2xl">{value}</p>
+        </div>
+      ))}
+    </div>
+  );
+}
+
+function WalletMoneyRows({ stats }: { stats: [string, ReactNode][] }) {
+  return (
+    <div className="wallet-money-panel grid grid-cols-3 overflow-hidden rounded-xl bg-[#f6f6f2]">
+      {stats.map(([label, value], index) => (
+        <div
+          key={label}
+          className={`wallet-money-row min-w-0 px-3 py-4 text-center sm:px-4 sm:text-left ${index === 0 ? "" : "border-l"}`}
+        >
+          <p className="truncate text-[10px] text-black/60 sm:text-sm">{label}</p>
+          <p className="mt-1 truncate text-lg font-black sm:text-2xl">{value}</p>
+        </div>
+      ))}
+    </div>
+  );
+}
+
 function Panel({ title, icon, children }: { title: string; icon: ReactNode; children: ReactNode }) {
   return <section className="glass rounded-xl p-5"><div className="mb-4 flex items-center gap-2 font-bold">{icon}{title}</div><div className="grid gap-3">{children}</div></section>;
 }
@@ -547,31 +685,31 @@ function ChallengeRow({ challenge }: { challenge: Challenge }) {
 
 function RoomRow({ room }: { room: MatchRoom }) {
   const selectRoom = useAppStore((state) => state.selectRoom);
-  return <button onClick={() => selectRoom(room.id)} className="flex items-center justify-between rounded-lg border border-transparent bg-[#f6f6f2] p-3 text-left"><span>Room {room.id.slice(-4)}</span><MatchStatusBadge status={room.status} /></button>;
+  return (
+    <button
+      onClick={() => selectRoom(room.id)}
+      className="flex items-center justify-between rounded-lg border border-transparent bg-[#f6f6f2] p-3 text-left"
+    >
+      <span className="flex items-center gap-3">
+        <img
+          src="/Manchester%20United%20Logo%20and%20symbol,%20meaning,%20history,%20PNG,%20brand.jpeg"
+          alt="Proposition squad"
+          className="size-9 rounded-full bg-white object-cover ring-2 ring-white"
+        />
+        <span>Room {room.id.slice(-4)}</span>
+      </span>
+      <MatchStatusBadge status={room.status} />
+    </button>
+  );
 }
 
-function ClubLogoPair() {
-  const logos = [
-    {
-      src: "/Manchester%20United%20Logo%20and%20symbol,%20meaning,%20history,%20PNG,%20brand.jpeg",
-      alt: "Manchester United",
-    },
-    {
-      src: "/New%20Manchester%20City%20Crest%20Revealed.jpeg",
-      alt: "Manchester City",
-    },
-  ];
+function PropositionIcon({ logoSrc, teamName }: { logoSrc: string; teamName: string }) {
   return (
-    <div className="flex -space-x-2">
-      {logos.map((logo) => (
-        <img
-          key={logo.alt}
-          src={logo.src}
-          alt={logo.alt}
-          className="size-10 rounded-full bg-white object-cover ring-2 ring-[#f6f6f2]"
-        />
-      ))}
-    </div>
+    <img
+      src={logoSrc}
+      alt={teamName}
+      className="size-12 rounded-full bg-white object-cover ring-2 ring-[#f6f6f2]"
+    />
   );
 }
 
@@ -581,14 +719,18 @@ function ChallengeCard({ challenge }: { challenge: Challenge }) {
   const acceptChallenge = useAppStore((state) => state.acceptChallenge);
   const selectChallenge = useAppStore((state) => state.selectChallenge);
   const creator = users.find((user) => user.id === challenge.creatorId);
+  const team = propositionTeamFor(challenge.id);
   return (
     <article className="listed-game-card rounded-xl p-5 transition">
       <div className="flex items-start justify-between gap-3">
         <div className="flex items-center gap-3">
-          <ClubLogoPair />
+          <PropositionIcon logoSrc={team.logoSrc} teamName={team.teamName} />
           <div>
-            <h3 className="text-[clamp(1rem,4.8vw,1.25rem)] font-black leading-tight break-words">{creator?.username} 1v1 Proposition</h3>
-            <p className="mt-1 text-sm text-black/60">Player offer · Man United vs Man City</p>
+            <h3 className="flex items-center gap-2 text-[clamp(1rem,4.8vw,1.25rem)] font-black leading-tight break-words">
+              {creator?.username ?? "Player"} 1v1 Proposition
+              <img src="/checklist.png" alt="Verified" className="size-5 rounded-full object-cover" />
+            </h3>
+            <p className="mt-1 text-sm text-black/60">Player offer · {team.teamName}</p>
           </div>
         </div>
         {creator && <TrustScoreBadge score={creator.trustScore} />}
@@ -610,9 +752,51 @@ function ChallengeCard({ challenge }: { challenge: Challenge }) {
   );
 }
 
+function ChallengeListFixedCell({ challenge, isLast = false }: { challenge: Challenge; isLast?: boolean }) {
+  const users = useAppStore((state) => state.users);
+  const selectChallenge = useAppStore((state) => state.selectChallenge);
+  const creator = users.find((user) => user.id === challenge.creatorId);
+  const team = propositionTeamFor(challenge.id);
+
+  return (
+    <button
+      onClick={() => selectChallenge(challenge.id)}
+      className={`marketplace-list-row flex h-24 w-full min-w-0 items-center gap-3 px-5 text-left text-sm transition hover:bg-black/5 dark:hover:bg-white/5 ${isLast ? "" : "border-b"}`}
+    >
+      <img
+        src={team.logoSrc}
+        alt={team.teamName}
+        className="size-9 rounded-full bg-white object-cover ring-2 ring-[#f6f6f2]"
+      />
+      <span className="min-w-0">
+        <span className="flex items-center gap-1.5 font-bold leading-tight">
+          <span className="truncate">{creator?.username ?? "Player"}</span>
+          <img src="/checklist.png" alt="Verified" className="size-4 rounded-full object-cover" />
+        </span>
+        <span className="mt-0.5 block truncate text-xs text-black/60">Player offer · {team.teamName}</span>
+      </span>
+    </button>
+  );
+}
+
+function ChallengeListMetricsRow({ challenge, isLast = false }: { challenge: Challenge; isLast?: boolean }) {
+  const selectChallenge = useAppStore((state) => state.selectChallenge);
+
+  return (
+    <button
+      onClick={() => selectChallenge(challenge.id)}
+      className={`marketplace-list-row grid h-24 w-full grid-cols-[96px_104px_150px] items-center gap-3 px-5 text-left text-sm transition hover:bg-black/5 dark:hover:bg-white/5 lg:grid-cols-3 ${isLast ? "" : "border-b"}`}
+    >
+      <span className="whitespace-nowrap font-black">{formatMoney(challenge.stakeAmount)}</span>
+      <span className="whitespace-nowrap font-black">{formatMoney(challenge.prizePool)}</span>
+      <span className="whitespace-nowrap font-black">{challenge.deadline}</span>
+    </button>
+  );
+}
+
 function RulesCard({ challenge }: { challenge: Challenge }) {
   return (
-    <div className="mt-4 rounded-lg border border-transparent bg-[#f6f6f2] p-3 text-sm">
+    <div className="challenge-rules-card mt-4 rounded-lg border border-transparent bg-white p-3 text-sm">
       <p className="font-bold text-black">Rules</p>
       <p className="mt-1 text-black/60">{challenge.rules}</p>
       <p className="mt-2 text-black/50">Draw: {challenge.drawRule} · Screenshot deadline: {challenge.screenshotDeadlineMinutes}m · Cancel fee: {formatMoney(challenge.cancellationFee)} · Platform fee: {challenge.platformFeePercentage}%</p>
@@ -623,6 +807,7 @@ function RulesCard({ challenge }: { challenge: Challenge }) {
 function Marketplace() {
   const challenges = useAppStore((state) => state.challenges);
   const [filter, setFilter] = useState({ stake: "all", squad: "all", status: "open", sort: "newest" });
+  const [viewMode, setViewMode] = useState<"grid" | "list">("grid");
   const filtered = useMemo(() => {
     return challenges
       .filter((challenge) => filter.status === "all" || challenge.status === filter.status)
@@ -632,16 +817,94 @@ function Marketplace() {
   }, [challenges, filter]);
   return (
     <div className="dashboard-page grid gap-5">
-      <div className="flex flex-wrap items-end justify-between gap-4">
-        <div><h2 className="text-3xl font-black">Marketplace</h2><p className="text-black/60">Each proposition stake is paid by both players. Escrow output is stake x 2.</p></div>
-        <div className="grid grid-cols-2 gap-2 sm:grid-cols-4">
-          <select className={inputClass()} value={filter.stake} onChange={(e) => setFilter({ ...filter, stake: e.target.value })}><option value="all">Any stake</option><option value="25">Up to $25</option><option value="50">Up to $50</option></select>
-          <select className={inputClass()} value={filter.squad} onChange={(e) => setFilter({ ...filter, squad: e.target.value })}><option value="all">Any tier</option><option value="82">Tier 82</option><option value="85">Tier 85</option></select>
-          <select className={inputClass()} value={filter.status} onChange={(e) => setFilter({ ...filter, status: e.target.value })}><option value="open">Open</option><option value="accepted">Accepted</option><option value="all">All</option></select>
-          <select className={inputClass()} value={filter.sort} onChange={(e) => setFilter({ ...filter, sort: e.target.value })}><option value="newest">Newest</option><option value="highest">Highest prize</option></select>
+      <div className="px-5">
+        <div className="flex items-start justify-between gap-4">
+          <div className="min-w-0">
+            <h2 className="text-3xl font-black">Marketplace</h2>
+            <p className="text-black/60">Each proposition stake is paid by both players. Escrow output is stake x 2.</p>
+          </div>
+          <button
+            type="button"
+            onClick={() => setViewMode((mode) => (mode === "grid" ? "list" : "grid"))}
+            className="grid size-11 shrink-0 place-items-center rounded-xl border border-black/20 text-black transition hover:border-lime-500 hover:text-lime-600"
+            aria-label={viewMode === "grid" ? "Show propositions as list" : "Show propositions as grid"}
+            title={viewMode === "grid" ? "List view" : "Grid view"}
+          >
+            {viewMode === "grid" ? (
+              <span className="marketplace-list-toggle-icon" aria-hidden="true">
+                <span />
+                <span />
+                <span />
+              </span>
+            ) : (
+              <LayoutGrid size={23} strokeWidth={2.2} />
+            )}
+          </button>
+        </div>
+        <div className="mt-4 grid grid-cols-2 gap-2 sm:grid-cols-4">
+          <SelectControl
+            value={filter.stake}
+            onChange={(stake) => setFilter({ ...filter, stake })}
+            options={[
+              { value: "all", label: "Any stake" },
+              { value: "25", label: "Up to $25" },
+              { value: "50", label: "Up to $50" },
+            ]}
+          />
+          <SelectControl
+            value={filter.squad}
+            onChange={(squad) => setFilter({ ...filter, squad })}
+            options={[
+              { value: "all", label: "Any tier" },
+              { value: "82", label: "Tier 82" },
+              { value: "85", label: "Tier 85" },
+            ]}
+          />
+          <SelectControl
+            value={filter.status}
+            onChange={(status) => setFilter({ ...filter, status })}
+            options={[
+              { value: "open", label: "Open" },
+              { value: "accepted", label: "Accepted" },
+              { value: "all", label: "All" },
+            ]}
+          />
+          <SelectControl
+            value={filter.sort}
+            onChange={(sort) => setFilter({ ...filter, sort })}
+            options={[
+              { value: "newest", label: "Newest" },
+              { value: "highest", label: "Highest prize" },
+            ]}
+          />
         </div>
       </div>
-      <div className="grid gap-4 lg:grid-cols-2">{filtered.map((challenge) => <ChallengeCard key={challenge.id} challenge={challenge} />)}</div>
+      {viewMode === "grid" ? (
+        <div className="grid gap-4 lg:grid-cols-2">{filtered.map((challenge) => <ChallengeCard key={challenge.id} challenge={challenge} />)}</div>
+      ) : (
+        <div className="-mx-3 grid grid-cols-[240px_minmax(0,1fr)] sm:-mx-4 sm:grid-cols-[280px_minmax(0,1fr)] lg:-mx-5 lg:grid-cols-4">
+          <div className="min-w-0">
+            <div className="marketplace-list-header px-5 py-2 text-xs font-bold uppercase tracking-wide text-black/50">
+              1v1 Proposition
+            </div>
+            {filtered.map((challenge, index) => (
+              <ChallengeListFixedCell key={challenge.id} challenge={challenge} isLast={index === filtered.length - 1} />
+            ))}
+          </div>
+          <div className="no-scrollbar min-w-0 overflow-x-auto lg:col-span-3 lg:overflow-visible">
+            <div className="min-w-[410px] lg:min-w-0">
+              <div className="marketplace-list-header grid grid-cols-[96px_104px_150px] items-center gap-3 px-5 py-2 text-xs font-bold uppercase tracking-wide text-black/50 lg:grid-cols-3">
+              <span>Stake</span>
+              <span>Escrow</span>
+              <span>Window</span>
+            </div>
+              {filtered.map((challenge, index) => (
+                <ChallengeListMetricsRow key={challenge.id} challenge={challenge} isLast={index === filtered.length - 1} />
+              ))}
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }
@@ -990,10 +1253,69 @@ function MatchRooms() {
   const rooms = useAppStore((state) => state.rooms);
   const selectedRoomId = useAppStore((state) => state.selectedRoomId);
   const challenges = useAppStore((state) => state.challenges);
-  const room = rooms.find((item) => item.id === selectedRoomId) ?? rooms[0];
-  if (!room) return <div className="glass rounded-xl p-6"><h2 className="text-2xl font-black">No match rooms</h2><p className="mt-2 text-black/60">Accept a marketplace challenge to create a private AI match room.</p></div>;
+  const selectRoom = useAppStore((state) => state.selectRoom);
+  const room = rooms.find((item) => item.id === selectedRoomId);
+  if (rooms.length === 0) {
+    return (
+      <div className="glass rounded-xl p-6">
+        <h2 className="text-2xl font-black">No match rooms</h2>
+        <p className="mt-2 text-black/60">Accept a marketplace challenge to create a private AI match room.</p>
+      </div>
+    );
+  }
+
+  if (!room) {
+    return (
+      <div className="grid gap-4 lg:grid-cols-[320px_1fr]">
+        <section className="glass rounded-xl p-4">
+          <h3 className="text-lg font-black">Your match rooms</h3>
+          <p className="mt-1 text-sm text-black/60">Select a room to enter.</p>
+          <div className="mt-4 grid gap-2">
+            {rooms.map((item) => (
+              <RoomRow key={item.id} room={item} />
+            ))}
+          </div>
+        </section>
+        <section className="glass grid place-items-center rounded-xl p-6 text-center">
+          <div>
+            <p className="text-lg font-black">Choose a match room</p>
+            <p className="mt-2 text-sm text-black/60">Pick one from the list to open the AI match room view.</p>
+          </div>
+        </section>
+      </div>
+    );
+  }
+
   const challenge = challenges.find((item) => item.id === room.challengeId)!;
-  return <AIChatRoom room={room} challenge={challenge} />;
+  return (
+    <div className="grid gap-4 lg:grid-cols-[320px_1fr]">
+      <section className="glass rounded-xl p-4">
+        <div className="flex items-center justify-between">
+          <h3 className="text-lg font-black">Your match rooms</h3>
+          <button
+            className="text-xs font-bold text-black/60"
+            onClick={() => selectRoom("")}
+          >
+            Clear
+          </button>
+        </div>
+        <p className="mt-1 text-sm text-black/60">Select a room to enter.</p>
+        <div className="mt-4 grid gap-2">
+          {rooms.map((item) => (
+            <button
+              key={item.id}
+              onClick={() => selectRoom(item.id)}
+              className={`flex items-center justify-between rounded-lg border border-transparent px-3 py-3 text-left text-sm ${item.id === room.id ? "bg-lime-50" : "bg-[#f6f6f2]"}`}
+            >
+              <span>Room {item.id.slice(-4)}</span>
+              <MatchStatusBadge status={item.status} />
+            </button>
+          ))}
+        </div>
+      </section>
+      <AIChatRoom room={room} challenge={challenge} />
+    </div>
+  );
 }
 
 function WalletPage() {
@@ -1011,55 +1333,54 @@ function WalletPage() {
   const penalties = txs.filter((tx) => tx.type === "Penalty deducted").reduce((sum, tx) => sum + Math.abs(tx.amount), 0);
   const winnings = txs.filter((tx) => tx.type === "Prize received").reduce((sum, tx) => sum + tx.amount, 0);
   const fees = txs.filter((tx) => tx.type.includes("fee") || tx.type === "Platform fee").reduce((sum, tx) => sum + Math.abs(tx.amount), 0);
+  const lossValue = txs
+    .filter((tx) => tx.type === "Penalty deducted" || tx.type === "Cancellation fee")
+    .reduce((sum, tx) => sum + Math.abs(tx.amount), 0);
+  const amountPaid = txs.filter((tx) => tx.amount < 0).reduce((sum, tx) => sum + Math.abs(tx.amount), 0);
   const quickAmounts = [5, 10, 25, 50, 100];
   return (
-    <div className="grid gap-5">
-      <div className="grid gap-4 lg:grid-cols-[1fr_380px]">
-        <section className="brand-panel rounded-xl p-6">
-          <p className="text-sm font-bold text-black/60">Available balance</p>
-          <h2 className="mt-2 text-3xl font-semibold sm:text-4xl">{formatMoney(activeUser.walletBalance)}</h2>
-          <p className="mt-3 max-w-xl text-black/70">Fund your frontend wallet with a mock deposit. No payment provider is connected yet, but the balance and transaction history update immediately.</p>
-          <div className="mt-6 grid gap-3 sm:grid-cols-3">
-            <Stat label="Escrow locked" value={formatMoney(activeUser.escrowBalance)} />
-            <Stat label="Lifetime winnings" value={formatMoney(winnings)} />
-            <Stat label="Total fees" value={formatMoney(fees)} />
-          </div>
-        </section>
-        <section className="glass rounded-xl p-5">
-          <h3 className="text-2xl font-black">Fund wallet</h3>
-          <p className="mt-1 text-sm text-black/60">Mock frontend-only deposit</p>
-          <div className="mt-5 grid gap-3">
-            <Field label="Amount">
-              <input
-                className={`${inputClass()} text-xl font-black`}
-                type="number"
-                min={1}
-                value={fundAmount}
-                onChange={(event) => setFundAmount(Number(event.target.value))}
-              />
-            </Field>
-            <div className="grid grid-cols-5 gap-2">
-              {quickAmounts.map((amount) => (
-                <button
-                  key={amount}
-                  className={`rounded-lg px-3 py-2 text-sm font-bold ${fundAmount === amount ? "bg-lime-400" : "bg-lime-50"}`}
-                  onClick={() => setFundAmount(amount)}
-                >
-                  ${amount}
-                </button>
-              ))}
-            </div>
-            <Button onClick={() => mockDeposit(fundAmount)} disabled={fundAmount <= 0}><Wallet size={18} /> Fund Wallet</Button>
-            <Button variant="ghost" onClick={() => setFundAmount(0)}>Clear</Button>
-          </div>
-        </section>
+    <div className="grid min-w-0 gap-5">
+      <div className="grid min-w-0 gap-4 lg:grid-cols-[340px_1fr]">
+        <WalletCard user={activeUser} />
+        <div className="px-4 sm:px-0">
+          <WalletMoneyRows
+            stats={[
+              ["Winnings", formatMoney(winnings)],
+              ["Loss value", formatMoney(lossValue)],
+              ["Amount paid", formatMoney(amountPaid || fees || penalties)],
+            ]}
+          />
+        </div>
       </div>
-      <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
-        <Stat label="Available" value={formatMoney(activeUser.walletBalance)} />
-        <Stat label="Escrow" value={formatMoney(activeUser.escrowBalance)} />
-        <Stat label="Lifetime penalties" value={formatMoney(penalties)} />
-        <Stat label="Platform fees" value={formatMoney(fees)} />
-      </div>
+      <Panel title="Fund wallet" icon={<Wallet size={18} />}>
+        <div className="grid gap-3 sm:grid-cols-[1fr_auto]">
+          <Field label="Amount">
+            <input
+              className={`${inputClass()} text-xl font-black`}
+              type="number"
+              min={1}
+              value={fundAmount}
+              onChange={(event) => setFundAmount(Number(event.target.value))}
+            />
+          </Field>
+          <div className="grid grid-cols-5 gap-2 sm:self-end">
+            {quickAmounts.map((amount) => (
+              <button
+                key={amount}
+                className={`rounded-lg px-3 py-2 text-sm font-bold ${fundAmount === amount ? "bg-lime-400" : "bg-lime-50"}`}
+                onClick={() => setFundAmount(amount)}
+              >
+                ${amount}
+              </button>
+            ))}
+          </div>
+        </div>
+        <div className="flex flex-wrap gap-2">
+          <Button onClick={() => mockDeposit(fundAmount)} disabled={fundAmount <= 0}><Wallet size={18} /> Fund Wallet</Button>
+          <Button variant="ghost" onClick={() => setFundAmount(0)}>Clear</Button>
+        </div>
+        <p className="text-sm text-black/60">Mock frontend-only deposit. No payment provider is connected yet.</p>
+      </Panel>
       <TransactionTable transactions={txs} />
     </div>
   );
@@ -1067,12 +1388,12 @@ function WalletPage() {
 
 function TransactionTable({ transactions }: { transactions: { id: string; type: string; amount: number; status: string; description: string; createdAt: string }[] }) {
   return (
-    <section className="transactions-panel glass overflow-hidden rounded-xl">
-      <div className="border-b border-transparent p-4 font-bold">Recent transactions</div>
-      <div className="no-scrollbar overflow-x-auto">
-        <table className="w-full min-w-[680px] text-left text-sm">
-          <thead className="bg-lime-50 text-black/60"><tr><th className="p-3">Type</th><th className="p-3">Amount</th><th className="p-3">Status</th><th className="p-3">Description</th><th className="p-3">Created</th></tr></thead>
-          <tbody>{transactions.map((tx) => <tr key={tx.id} className="border-t border-transparent"><td className="p-3">{tx.type}</td><td className={`p-3 font-bold ${tx.amount >= 0 ? "text-lime-600" : "text-red-600"}`}>{formatMoney(tx.amount)}</td><td className="p-3">{tx.status}</td><td className="p-3 text-black/60">{tx.description}</td><td className="p-3 text-black/50">{new Date(tx.createdAt).toLocaleDateString()}</td></tr>)}</tbody>
+    <section className="min-w-0 max-w-full px-4">
+      <div className="py-4 font-bold">Recent transactions</div>
+      <div className="transactions-panel no-scrollbar max-w-full overflow-x-auto rounded-xl">
+        <table className="min-w-[680px] text-left text-sm sm:text-base">
+          <thead className="transactions-table-head text-black/60"><tr><th className="px-4 py-4">Type</th><th className="px-4 py-4">Amount</th><th className="px-4 py-4">Status</th><th className="px-4 py-4">Description</th><th className="px-4 py-4">Created</th></tr></thead>
+          <tbody>{transactions.map((tx) => <tr key={tx.id} className="border-t border-transparent"><td className="whitespace-nowrap px-4 py-4">{tx.type}</td><td className={`whitespace-nowrap px-4 py-4 font-bold ${tx.amount >= 0 ? "text-lime-600" : "text-red-600"}`}>{formatMoney(tx.amount)}</td><td className="whitespace-nowrap px-4 py-4">{tx.status}</td><td className="max-w-[260px] truncate px-4 py-4 text-black/60">{tx.description}</td><td className="whitespace-nowrap px-4 py-4 text-black/50">{new Date(tx.createdAt).toLocaleDateString()}</td></tr>)}</tbody>
         </table>
       </div>
     </section>

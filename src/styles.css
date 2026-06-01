@@ -38,6 +38,7 @@ body {
   margin: 0;
   min-width: 320px;
   min-height: 100vh;
+  overflow-x: hidden;
   background: #ffffff;
   color: #050505;
 }
@@ -74,7 +75,7 @@ button:disabled {
 }
 
 .listed-game-card {
-  background: #f6f6f2;
+  background: #ffffff;
 }
 
 .brand-logo {
@@ -88,6 +89,55 @@ button:disabled {
 
 .banner-fade {
   background: linear-gradient(to bottom, transparent, #ffffff);
+}
+
+.gradient-image-border {
+  overflow: hidden;
+  padding: 4px;
+  border-radius: 14px;
+  background: linear-gradient(135deg, #a7ff2f, #4ade80, #16a34a);
+}
+
+.transactions-panel {
+  background: #f1f1ee;
+}
+
+.transactions-heading,
+.transactions-table-head {
+  background: #ecece8;
+}
+
+.marketplace-list-header,
+.marketplace-list-row {
+  border-bottom-color: #d6d6d2;
+}
+
+.wallet-money-row {
+  border-left-color: #d6d6d2;
+}
+
+.marketplace-list-toggle-icon {
+  display: grid;
+  width: 24px;
+  height: 20px;
+  align-content: space-between;
+  overflow: hidden;
+  border: 1.5px solid currentColor;
+  border-radius: 5px;
+}
+
+.marketplace-list-toggle-icon span {
+  display: block;
+  width: 100%;
+  height: 1.5px;
+  background: currentColor;
+}
+
+.marketplace-list-sticky-cell {
+  position: sticky;
+  left: 0;
+  z-index: 1;
+  background: #ffffff;
 }
 
 * {
@@ -115,11 +165,40 @@ img {
 }
 
 :root.dark-theme .stat-card {
-  background-color: #101010 !important;
+  background-color: #181818 !important;
+}
+
+:root.dark-theme .dashboard-stat-strip,
+:root.dark-theme .dashboard-stat-item,
+:root.dark-theme .wallet-mini-stat,
+:root.dark-theme .wallet-money-panel {
+  background-color: #181818 !important;
+}
+
+:root.dark-theme .wallet-money-row {
+  border-left-color: #3a3a3a !important;
 }
 
 :root.dark-theme .transactions-panel {
-  background-color: #000000 !important;
+  background-color: #181818 !important;
+}
+
+:root.dark-theme .transactions-heading,
+:root.dark-theme .transactions-table-head {
+  background-color: #242424 !important;
+}
+
+:root.dark-theme .marketplace-list-header,
+:root.dark-theme .marketplace-list-row {
+  border-bottom-color: #3a3a3a !important;
+}
+
+:root.dark-theme [class*="border-black/15"] {
+  border-color: #3a3a3a !important;
+}
+
+:root.dark-theme .marketplace-list-sticky-cell {
+  background: #000000 !important;
 }
 
 :root.dark-theme .app-shell,
@@ -181,8 +260,12 @@ img {
   color: #f8f8f2;
 }
 
+:root.dark-theme .dashboard-stat-item + .dashboard-stat-item {
+  border-left-color: rgba(248, 248, 242, 0.24) !important;
+}
+
 :root.dark-theme thead {
-  background-color: #17210c !important;
+  background-color: #242424 !important;
 }
 
 :root.dark-theme .banner-fade {
