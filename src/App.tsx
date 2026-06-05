@@ -3,21 +3,27 @@ import {
   Bot,
   CheckCircle2,
   ChevronDown,
+  CirclePlus,
+  CircleUserRound,
   Clock3,
   Gavel,
-  History,
+  Gamepad2,
+  LayoutDashboard,
   LayoutGrid,
+  ListTree,
   LogIn,
   Mic,
   Moon,
   Plus,
   Send,
   ShieldCheck,
+  Store,
   Sun,
   Swords,
   Upload,
   UserRound,
   Wallet,
+  WalletCards,
   Zap,
 } from "lucide-react";
 import { FormEvent, ReactNode, useEffect, useMemo, useState } from "react";
@@ -34,20 +40,20 @@ import type {
 } from "./types";
 
 const navItems: { page: Page; label: string; icon: ReactNode }[] = [
-  { page: "dashboard", label: "Dashboard", icon: <BadgeDollarSign size={18} strokeWidth={2.4} /> },
-  { page: "marketplace", label: "Marketplace", icon: <Swords size={18} strokeWidth={2.4} /> },
-  { page: "create", label: "Create", icon: <Plus size={18} strokeWidth={2.4} /> },
-  { page: "wallet", label: "Wallet", icon: <Wallet size={18} strokeWidth={2.4} /> },
-  { page: "rooms", label: "Match Rooms", icon: <Bot size={18} strokeWidth={2.4} /> },
-  { page: "profile", label: "Profile", icon: <UserRound size={18} strokeWidth={2.4} /> },
-  { page: "history", label: "History", icon: <History size={18} strokeWidth={2.4} /> },
+  { page: "dashboard", label: "Dashboard", icon: <LayoutDashboard size={18} strokeWidth={2.4} /> },
+  { page: "marketplace", label: "Marketplace", icon: <Store size={18} strokeWidth={2.4} /> },
+  { page: "create", label: "Create", icon: <CirclePlus size={18} strokeWidth={2.4} /> },
+  { page: "wallet", label: "Wallet", icon: <WalletCards size={18} strokeWidth={2.4} /> },
+  { page: "rooms", label: "Match Rooms", icon: <Gamepad2 size={18} strokeWidth={2.4} /> },
+  { page: "profile", label: "Profile", icon: <CircleUserRound size={18} strokeWidth={2.4} /> },
+  { page: "history", label: "History", icon: <Clock3 size={18} strokeWidth={2.4} /> },
 ];
 
 const navIconClass =
-  "grid size-9 place-items-center rounded-xl bg-lime-50 text-black/70 transition group-hover:bg-lime-100 group-hover:text-black";
-const navIconActiveClass = "bg-lime-200 text-black";
+  "grid size-9 place-items-center rounded-xl bg-sky-50 text-black/70 transition group-hover:bg-sky-100 group-hover:text-black";
+const navIconActiveClass = "bg-sky-200 text-black";
 const navIconCompactClass =
-  "grid size-7 place-items-center rounded-full bg-lime-50 text-black/70 transition group-hover:bg-lime-100 group-hover:text-black";
+  "grid size-7 place-items-center rounded-full bg-sky-50 text-black/70 transition group-hover:bg-sky-100 group-hover:text-black";
 
 const propositionTeams: Record<string, { logoSrc: string; teamName: string }> = {
   ch_1: {
@@ -89,7 +95,7 @@ function BrandMark({ size = "md" }: { size?: "sm" | "md" | "lg" }) {
   return (
     <img
       src="/r1.png"
-      alt="Vsports logo"
+      alt="Astro logo"
       className={`${dimensions} rounded-lg object-cover`}
     />
   );
@@ -109,8 +115,8 @@ function Button({
   disabled?: boolean;
 }) {
   const styles = {
-    primary: "bg-lime-400 text-black hover:bg-lime-300",
-    ghost: "border border-transparent bg-lime-50 text-black hover:bg-lime-100",
+    primary: "bg-sky-600 text-white hover:bg-sky-500",
+    ghost: "border border-transparent bg-sky-50 text-black hover:bg-sky-100",
     danger: "bg-rose-500 text-white hover:bg-rose-400",
   };
   return (
@@ -141,7 +147,7 @@ function Field({
 }
 
 function inputClass() {
-  return "min-h-11 rounded-lg border border-transparent bg-lime-50 px-3 text-black outline-none transition focus:bg-lime-50";
+  return "min-h-11 rounded-lg border border-transparent bg-sky-50 px-3 text-black outline-none transition focus:bg-sky-50";
 }
 
 function SelectControl({
@@ -156,7 +162,7 @@ function SelectControl({
   return (
     <label className="relative block min-w-0">
       <select
-        className="min-h-11 w-full appearance-none rounded-xl border border-transparent bg-lime-50 py-2 pl-3 pr-10 text-black outline-none transition focus:bg-lime-100"
+        className="min-h-11 w-full appearance-none rounded-xl border border-transparent bg-sky-50 py-2 pl-3 pr-10 text-black outline-none transition focus:bg-sky-100"
         value={value}
         onChange={(event) => onChange(event.target.value)}
       >
@@ -174,12 +180,12 @@ function SelectControl({
 }
 
 function TrustScoreBadge({ score }: { score: number }) {
-  const color = score >= 90 ? "text-lime-600 border-transparent" : score >= 75 ? "text-black border-transparent" : "text-red-600 border-transparent";
+  const color = score >= 90 ? "text-sky-600 border-transparent" : score >= 75 ? "text-black border-transparent" : "text-red-600 border-transparent";
   return <span className={`rounded-full border px-3 py-1 text-xs font-bold ${color}`}>Trust {score}</span>;
 }
 
 function MatchStatusBadge({ status }: { status: string }) {
-  return <span className="rounded-full border border-transparent bg-lime-400/10 px-3 py-1 text-xs font-bold uppercase tracking-wide text-black">{status.replaceAll("_", " ")}</span>;
+  return <span className="rounded-full border border-transparent bg-sky-600/10 px-3 py-1 text-xs font-bold uppercase tracking-wide text-black">{status.replaceAll("_", " ")}</span>;
 }
 
 function WalletCard({ user }: { user: User }) {
@@ -236,7 +242,7 @@ function Sidebar() {
       <button onClick={() => setPage("landing")} className="mb-8 flex items-center gap-3">
         <BrandMark />
         <div className="text-left">
-          <p className="text-lg font-black">Vsports</p>
+          <p className="text-lg font-black">Astro</p>
           <p className="text-xs text-black/50">Skill match escrow</p>
         </div>
       </button>
@@ -245,7 +251,7 @@ function Sidebar() {
           <button
             key={item.page}
             onClick={() => setPage(item.page)}
-            className={`group flex items-center gap-3 rounded-lg bg-white px-3 py-3 text-left text-sm transition ${page === item.page ? "text-lime-600" : "text-black/80 hover:text-lime-600"}`}
+            className={`group flex items-center gap-3 rounded-lg bg-white px-3 py-3 text-left text-sm transition ${page === item.page ? "text-sky-600" : "text-black/80 hover:text-sky-600"}`}
           >
             <span className={`${navIconClass} ${page === item.page ? navIconActiveClass : ""}`}>{item.icon}</span>
             {item.label}
@@ -262,25 +268,25 @@ function TopNav() {
   const setPage = useAppStore((state) => state.setPage);
   const logout = useAppStore((state) => state.logout);
   const [isDarkTheme, setIsDarkTheme] = useState(() => {
-    return window.localStorage.getItem("vsports-theme") === "dark";
+    return window.localStorage.getItem("astro-theme") === "dark";
   });
 
   useEffect(() => {
     document.documentElement.classList.toggle("dark-theme", isDarkTheme);
-    window.localStorage.setItem("vsports-theme", isDarkTheme ? "dark" : "light");
+    window.localStorage.setItem("astro-theme", isDarkTheme ? "dark" : "light");
   }, [isDarkTheme]);
 
   return (
     <header className="top-nav-bar border-b border-transparent bg-white/95 px-0 pb-1 pt-2 backdrop-blur sm:py-3">
       <div className="flex items-center justify-between gap-2 px-3 sm:gap-3 sm:px-4">
         <button onClick={() => setPage("landing")} className="flex min-w-0 items-center gap-2 font-black">
-          <BrandMark size="sm" /> Vsports
+          <BrandMark size="sm" /> Astro
         </button>
         <div className="flex shrink-0 items-center gap-1.5 sm:gap-2">
           <button
             type="button"
             onClick={() => setIsDarkTheme((current) => !current)}
-            className="grid size-10 place-items-center rounded-lg bg-lime-50 text-black transition hover:bg-lime-100 sm:size-11"
+            className="grid size-10 place-items-center rounded-lg bg-sky-50 text-black transition hover:bg-sky-100 sm:size-11"
             aria-label={isDarkTheme ? "Switch to white theme" : "Switch to black theme"}
             title={isDarkTheme ? "White theme" : "Black theme"}
           >
@@ -303,7 +309,7 @@ function TopNav() {
             <button
               key={item.page}
               onClick={() => setPage(item.page)}
-              className={`group inline-flex min-w-max items-center gap-2 rounded-full border border-transparent bg-white px-2.5 py-1.5 text-xs ${page === item.page ? "text-lime-600" : "text-black/80"}`}
+              className={`group inline-flex min-w-max items-center gap-2 rounded-full border border-transparent bg-white px-2.5 py-1.5 text-xs ${page === item.page ? "text-sky-600" : "text-black/80"}`}
             >
               <span className={`${navIconCompactClass} ${page === item.page ? navIconActiveClass : ""}`}>{item.icon}</span>
               {item.label}
@@ -316,8 +322,10 @@ function TopNav() {
 }
 
 function TopBanner() {
-  const bannerImages = ["/k8.jpeg", "/k9.jpeg", "/K3.jpeg", "/K.jpeg"];
+  const bannerImages = ["/k5.png", "/Z1.jpeg", "/Z2.png", "/Z4.jpeg", "/Z5.png"];
   const [activeBanner, setActiveBanner] = useState(0);
+  const activeBannerSrc = bannerImages[activeBanner];
+  const bannerObjectPosition = activeBannerSrc === "/k5.png" || activeBannerSrc === "/Z5.png" ? "object-center" : "object-[center_18%]";
 
   useEffect(() => {
     const timer = window.setInterval(() => {
@@ -330,9 +338,9 @@ function TopBanner() {
   return (
     <div className="relative h-20 w-full overflow-hidden sm:h-24 lg:h-28">
       <img
-        src={bannerImages[activeBanner]}
+        src={activeBannerSrc}
         alt="Football banner"
-        className="size-full object-cover object-[center_18%]"
+        className={`size-full object-cover ${bannerObjectPosition}`}
       />
       <div className="banner-fade pointer-events-none absolute inset-x-0 bottom-0 h-12" />
     </div>
@@ -369,18 +377,10 @@ function LandingPage() {
           <div className="absolute inset-0 bg-sky-500/25" />
           <div className="pointer-events-none absolute inset-x-0 bottom-0 h-44 bg-gradient-to-b from-transparent via-white/70 to-white" />
           <div className="relative z-10 flex min-h-screen flex-col p-5 sm:p-7 lg:p-9">
-            <div className="fixed left-5 right-5 top-5 z-50 flex items-center justify-between rounded-lg bg-sky-400/55 px-4 py-3 text-white backdrop-blur-sm sm:left-7 sm:right-7 lg:left-9 lg:right-9">
-              <div className="flex items-center gap-2">
+            <div className="fixed left-1/2 top-5 z-50 flex -translate-x-1/2 items-center justify-center text-white">
+              <div className="flex items-center gap-2 rounded-xl bg-white/18 px-3 py-2 backdrop-blur-sm">
                 <BrandMark size="sm" />
-                <span className="text-sm font-bold">Vsports</span>
-              </div>
-              <div className="flex items-center gap-2">
-                <button onClick={() => setPage("login")} className="rounded-xl bg-white px-4 py-2 text-xs font-bold text-black">
-                  Login <span className="ml-2 rounded-lg bg-lime-400 px-2 py-1">›</span>
-                </button>
-                <button onClick={() => setPage("register")} className="hidden rounded-xl bg-lime-400 px-4 py-2 text-xs font-bold text-black sm:block">
-                  Sign up
-                </button>
+                <span className="text-base font-bold">Astro</span>
               </div>
             </div>
             <div className="relative mt-28 flex-1 sm:mt-32 lg:mt-36">
@@ -395,6 +395,14 @@ function LandingPage() {
                 Create a proposition, lock equal entries, play the match, upload proof, and let the AI referee guide settlement.
               </p>
             </div>
+            <div className="fixed bottom-6 left-1/2 z-50 flex -translate-x-1/2 items-center gap-2 rounded-2xl bg-white/18 p-2 text-white backdrop-blur-sm">
+              <button onClick={() => setPage("login")} className="rounded-xl bg-white px-5 py-3 text-sm font-bold text-black">
+                Login <span className="ml-2 rounded-lg bg-sky-600 px-2 py-1 text-white">›</span>
+              </button>
+              <button onClick={() => setPage("register")} className="rounded-xl bg-sky-600 px-5 py-3 text-sm font-bold text-white">
+                Sign up
+              </button>
+            </div>
           </div>
         </section>
 
@@ -408,35 +416,35 @@ function LandingPage() {
               The competition layer for trusted 1v1 football gaming
             </h2>
             <p className="text-sm leading-7 text-black/65">
-              Football gamers already compete through group chats and DMs, but payments, proof, disputes, and reputation are messy. Vsports gives every challenge a structured flow.
+              Football gamers already compete through group chats and DMs, but payments, proof, disputes, and reputation are messy. Astro gives every challenge a structured flow.
             </p>
             <div className="text-sm leading-7 text-black/65">
               <p>Players create propositions, lock entries in escrow, share match codes, upload scoreboard screenshots, and let an AI-assisted referee explain the settlement path.</p>
               <button onClick={() => setPage("marketplace")} className="mt-5 rounded-xl bg-black px-4 py-3 text-xs font-bold text-white">
-                Browse challenges <span className="ml-2 rounded-lg bg-lime-400 px-2 py-1 text-black">›</span>
+                Browse challenges <span className="ml-2 rounded-lg bg-sky-600 px-2 py-1 text-white">›</span>
               </button>
             </div>
           </div>
           <div className="mt-10 grid gap-8 lg:grid-cols-[1.15fr_0.85fr]">
             <div className="relative overflow-hidden rounded-xl border border-black/15">
-              <img src="/K.jpeg" alt="Football player artwork" className="h-[520px] w-full object-cover" />
+              <img src="/Z5.png" alt="Football player artwork" className="h-[520px] w-full object-cover object-center" />
               <div className="absolute bottom-0 left-0 right-0 grid grid-cols-[1fr_1fr_64px] bg-sky-950/80 text-white">
                 <div className="p-4">
-                  <p className="text-2xl font-black text-lime-300">$5+</p>
+                  <p className="text-2xl font-black text-sky-200">$5+</p>
                   <p className="text-sm">Stake each</p>
                 </div>
                 <div className="p-4">
-                  <p className="text-2xl font-black text-lime-300">x2</p>
+                  <p className="text-2xl font-black text-sky-200">x2</p>
                   <p className="text-sm">Escrow output</p>
                 </div>
                 <button onClick={() => setPage("marketplace")} className="grid place-items-center rounded-r-[10px] bg-sky-900 text-3xl">↗</button>
               </div>
             </div>
             <div className="grid content-between gap-6">
-              <img src="/K1.jpeg" alt="Football player artwork" className="h-72 w-full rounded-xl border border-black/15 object-cover" />
+              <img src="/Z2.png" alt="Football player artwork" className="h-72 w-full rounded-xl border border-black/15 object-cover object-center" />
               <div>
                 <div className="flex items-end gap-4">
-                  <span className="text-8xl font-black text-lime-400">AI</span>
+                  <span className="text-8xl font-black text-sky-500">AI</span>
                   <span className="pb-4 text-xl font-bold leading-tight">Referee<br />Room</span>
                 </div>
                 <ul className="mt-4 list-disc pl-5 text-sm leading-7 text-black/70">
@@ -449,16 +457,13 @@ function LandingPage() {
           </div>
         </section>
 
-        <section className="relative overflow-hidden px-[7%] py-14">
-          <img src="/b5.png" alt="" className="absolute inset-0 size-full object-cover" />
-          <div className="absolute inset-0 bg-white/82" />
-          <div className="pointer-events-none absolute inset-x-0 bottom-0 h-36 bg-gradient-to-b from-transparent to-white" />
-          <div className="relative z-10">
-            <div className="gradient-image-border">
+        <section className="px-[7%] py-14">
+          <div>
+            <div className="overflow-hidden rounded-xl">
               <img
                 src="/R4.png"
-                alt="Vsports match preview"
-                className="w-full rounded-[10px] object-cover"
+                alt="Astro match preview"
+                className="w-full object-cover"
               />
             </div>
           </div>
@@ -498,7 +503,7 @@ function LandingPage() {
             <div className="flex items-center gap-3">
               <BrandMark size="sm" />
               <div>
-                <p className="text-xl font-black">Vsports</p>
+                <p className="text-xl font-black">Astro</p>
                 <p className="text-sm text-white/60">The 1v1 competition layer for virtual sports gamers.</p>
               </div>
             </div>
@@ -522,7 +527,7 @@ function AuthScreen({ mode }: { mode: "login" | "register" }) {
   const login = useAppStore((state) => state.login);
   const register = useAppStore((state) => state.register);
   const setPage = useAppStore((state) => state.setPage);
-  const [form, setForm] = useState({ username: "NeoStriker", email: "neo@vsports.test", password: "password", country: "Nigeria", age: true, terms: true });
+  const [form, setForm] = useState({ username: "NeoStriker", email: "neo@astro.test", password: "password", country: "Nigeria", age: true, terms: true });
   const submit = (event: FormEvent) => {
     event.preventDefault();
     if (mode === "login") login(form.email);
@@ -628,11 +633,11 @@ function Stat({ label, value }: { label: string; value: ReactNode }) {
 
 function DashboardStatStrip({ stats }: { stats: [string, ReactNode][] }) {
   return (
-    <div className="dashboard-stat-strip mt-6 grid grid-cols-4 overflow-hidden rounded-xl bg-[#f6f6f2] sm:gap-3 sm:overflow-visible sm:rounded-none sm:bg-transparent">
+    <div className="dashboard-stat-strip dashboard-overview-stat-strip mt-6 grid grid-cols-4 overflow-hidden rounded-xl bg-[#f6f6f2]">
       {stats.map(([label, value], index) => (
         <div
           key={label}
-          className={`dashboard-stat-item min-w-0 px-1.5 py-3 text-center sm:rounded-lg sm:border sm:border-transparent sm:bg-[#f6f6f2] sm:p-4 sm:text-left ${index > 0 ? "border-l border-black/20" : ""}`}
+          className={`dashboard-stat-item min-w-0 px-1.5 py-3 text-center sm:p-4 ${index > 0 ? "border-l border-black/20" : ""}`}
         >
           <p className="truncate text-[9px] leading-tight text-black/60 min-[380px]:text-[10px] sm:text-sm">{label}</p>
           <p className="mt-1 text-base font-black leading-none min-[380px]:text-lg sm:text-2xl">{value}</p>
@@ -826,16 +831,12 @@ function Marketplace() {
           <button
             type="button"
             onClick={() => setViewMode((mode) => (mode === "grid" ? "list" : "grid"))}
-            className="grid size-11 shrink-0 place-items-center rounded-xl border border-black/20 text-black transition hover:border-lime-500 hover:text-lime-600"
+            className="grid size-11 shrink-0 place-items-center rounded-xl border border-black/20 text-black transition hover:border-sky-500 hover:text-sky-600"
             aria-label={viewMode === "grid" ? "Show propositions as list" : "Show propositions as grid"}
             title={viewMode === "grid" ? "List view" : "Grid view"}
           >
             {viewMode === "grid" ? (
-              <span className="marketplace-list-toggle-icon" aria-hidden="true">
-                <span />
-                <span />
-                <span />
-              </span>
+              <ListTree size={24} strokeWidth={2.2} />
             ) : (
               <LayoutGrid size={23} strokeWidth={2.2} />
             )}
@@ -994,7 +995,7 @@ function WalletExplainer({ challenge }: { challenge: Challenge }) {
 }
 
 function CountdownTimer() {
-  return <div className="inline-flex items-center gap-2 rounded-full border border-transparent bg-lime-200/70 px-3 py-1 text-sm text-black"><Clock3 size={16} /> 09:58 evidence window</div>;
+  return <div className="inline-flex items-center gap-2 rounded-full border border-transparent bg-sky-200/70 px-3 py-1 text-sm text-black"><Clock3 size={16} /> 09:58 evidence window</div>;
 }
 
 function AIChatRoom({ room, challenge }: { room: MatchRoom; challenge: Challenge }) {
@@ -1053,7 +1054,7 @@ function AIChatRoom({ room, challenge }: { room: MatchRoom; challenge: Challenge
           <input className={inputClass()} value={matchCode} onChange={(e) => setMatchCode(e.target.value)} placeholder="Dream League match code" />
           <Button variant="ghost" onClick={() => submitMatchCode(room.id, matchCode)}>Share Code</Button>
         </div>
-        <div className="mt-3 flex w-fit items-center gap-4 rounded-full bg-lime-50 px-5 py-3">
+        <div className="mt-3 flex w-fit items-center gap-4 rounded-full bg-sky-50 px-5 py-3">
           <Wallet size={24} />
           <input
             className="w-16 bg-transparent text-xl font-bold text-black outline-none"
@@ -1077,7 +1078,7 @@ function AIChatRoom({ room, challenge }: { room: MatchRoom; challenge: Challenge
           />
           <div className="mt-3 flex items-center gap-3">
             <button
-              className="grid size-11 place-items-center rounded-full text-black transition hover:bg-lime-50"
+              className="grid size-11 place-items-center rounded-full text-black transition hover:bg-sky-50"
               onClick={() => uploadEvidence(room.id, currentSlot, `${currentSlot}-scoreboard.png`)}
               aria-label="Upload screenshot"
             >
@@ -1085,11 +1086,11 @@ function AIChatRoom({ room, challenge }: { room: MatchRoom; challenge: Challenge
             </button>
             <span className="ml-auto text-lg text-black/45">Referee</span>
             <span className="text-lg text-black/45">@refree</span>
-            <button className="grid size-11 place-items-center rounded-full text-black transition hover:bg-lime-50" aria-label="Voice message">
+            <button className="grid size-11 place-items-center rounded-full text-black transition hover:bg-sky-50" aria-label="Voice message">
               <Mic size={26} />
             </button>
             <button
-              className="grid size-14 place-items-center rounded-full bg-black/5 text-black transition hover:bg-lime-200"
+              className="grid size-14 place-items-center rounded-full bg-black/5 text-black transition hover:bg-sky-200"
               onClick={sendMessage}
               aria-label="Send message"
             >
@@ -1122,7 +1123,7 @@ function nextAction(status: MatchRoom["status"]) {
 }
 
 function ChatMessage({ message, playerName }: { message: { senderType: string; text: string; timestamp: string; messageType: string }; playerName?: string }) {
-  const color = message.messageType === "warning" ? "border-transparent bg-lime-200/70" : message.messageType === "success" ? "border-transparent bg-lime-400/25" : "border-transparent bg-white";
+  const color = message.messageType === "warning" ? "border-transparent bg-sky-200/70" : message.messageType === "success" ? "border-transparent bg-sky-600/25" : "border-transparent bg-white";
   return (
     <div className={`rounded-xl border p-3 ${color}`}>
       <div className="mb-1 flex items-center gap-2 text-xs uppercase tracking-wide text-black/50">
@@ -1142,13 +1143,13 @@ function MatchChecklist({ room }: { room: MatchRoom }) {
     ["AI result", Boolean(room.result)],
     ["Settlement", room.status === "completed" || room.status === "refunded" || room.status === "penalized"],
   ];
-  return <Panel title="Checklist" icon={<CheckCircle2 size={18} />}>{steps.map(([label, done]) => <div key={String(label)} className="flex items-center justify-between rounded-lg bg-[#f6f6f2] p-3 text-sm"><span>{label}</span><span className={done ? "text-lime-600" : "text-black/50"}>{done ? "Done" : "Pending"}</span></div>)}</Panel>;
+  return <Panel title="Checklist" icon={<CheckCircle2 size={18} />}>{steps.map(([label, done]) => <div key={String(label)} className="flex items-center justify-between rounded-lg bg-[#f6f6f2] p-3 text-sm"><span>{label}</span><span className={done ? "text-sky-600" : "text-black/50"}>{done ? "Done" : "Pending"}</span></div>)}</Panel>;
 }
 
 function SquadSubmissionForm({ room, challenge }: { room: MatchRoom; challenge: Challenge }) {
   const submitSquad = useAppStore((state) => state.submitSquad);
   const [slot, setSlot] = useState<"one" | "two">("one");
-  const [form, setForm] = useState({ teamName: "Vsports FC", squadRating: challenge.squadRatingLimit, notes: "Balanced squad, no custom players.", confirmed: true });
+  const [form, setForm] = useState({ teamName: "Astro FC", squadRating: challenge.squadRatingLimit, notes: "Balanced squad, no custom players.", confirmed: true });
   const playerId = slot === "one" ? room.playerOneId : room.playerTwoId;
   const error = form.squadRating > challenge.squadRatingLimit ? "Squad rating exceeds this challenge limit." : "";
   const submit = (event: FormEvent) => {
@@ -1220,10 +1221,10 @@ function DeveloperPanel({ room }: { room: MatchRoom }) {
     { id: "unknown", label: "AI cannot determine" },
   ];
   return (
-    <div className="rounded-xl border border-transparent bg-lime-100 p-4">
+    <div className="rounded-xl border border-transparent bg-sky-100 p-4">
       <p className="mb-3 font-bold text-black">Developer Mode</p>
       <div className="grid grid-cols-2 gap-2">
-        {scenarios.map((scenario) => <button key={scenario.id} onClick={() => runScenario(room.id, scenario.id)} className="rounded-lg border border-transparent bg-lime-50 px-3 py-2 text-xs text-black transition hover:bg-lime-200">{scenario.label}</button>)}
+        {scenarios.map((scenario) => <button key={scenario.id} onClick={() => runScenario(room.id, scenario.id)} className="rounded-lg border border-transparent bg-sky-50 px-3 py-2 text-xs text-black transition hover:bg-sky-200">{scenario.label}</button>)}
       </div>
     </div>
   );
@@ -1305,7 +1306,7 @@ function MatchRooms() {
             <button
               key={item.id}
               onClick={() => selectRoom(item.id)}
-              className={`flex items-center justify-between rounded-lg border border-transparent px-3 py-3 text-left text-sm ${item.id === room.id ? "bg-lime-50" : "bg-[#f6f6f2]"}`}
+              className={`flex items-center justify-between rounded-lg border border-transparent px-3 py-3 text-left text-sm ${item.id === room.id ? "bg-sky-50" : "bg-[#f6f6f2]"}`}
             >
               <span>Room {item.id.slice(-4)}</span>
               <MatchStatusBadge status={item.status} />
@@ -1367,7 +1368,7 @@ function WalletPage() {
             {quickAmounts.map((amount) => (
               <button
                 key={amount}
-                className={`rounded-lg px-3 py-2 text-sm font-bold ${fundAmount === amount ? "bg-lime-400" : "bg-lime-50"}`}
+                className={`rounded-lg px-3 py-2 text-sm font-bold ${fundAmount === amount ? "bg-sky-600 text-white" : "bg-sky-50"}`}
                 onClick={() => setFundAmount(amount)}
               >
                 ${amount}
@@ -1393,7 +1394,7 @@ function TransactionTable({ transactions }: { transactions: { id: string; type: 
       <div className="transactions-panel no-scrollbar max-w-full overflow-x-auto rounded-xl">
         <table className="min-w-[680px] text-left text-sm sm:text-base">
           <thead className="transactions-table-head text-black/60"><tr><th className="px-4 py-4">Type</th><th className="px-4 py-4">Amount</th><th className="px-4 py-4">Status</th><th className="px-4 py-4">Description</th><th className="px-4 py-4">Created</th></tr></thead>
-          <tbody>{transactions.map((tx) => <tr key={tx.id} className="border-t border-transparent"><td className="whitespace-nowrap px-4 py-4">{tx.type}</td><td className={`whitespace-nowrap px-4 py-4 font-bold ${tx.amount >= 0 ? "text-lime-600" : "text-red-600"}`}>{formatMoney(tx.amount)}</td><td className="whitespace-nowrap px-4 py-4">{tx.status}</td><td className="max-w-[260px] truncate px-4 py-4 text-black/60">{tx.description}</td><td className="whitespace-nowrap px-4 py-4 text-black/50">{new Date(tx.createdAt).toLocaleDateString()}</td></tr>)}</tbody>
+          <tbody>{transactions.map((tx) => <tr key={tx.id} className="border-t border-transparent"><td className="whitespace-nowrap px-4 py-4">{tx.type}</td><td className={`whitespace-nowrap px-4 py-4 font-bold ${tx.amount >= 0 ? "text-sky-600" : "text-red-600"}`}>{formatMoney(tx.amount)}</td><td className="whitespace-nowrap px-4 py-4">{tx.status}</td><td className="max-w-[260px] truncate px-4 py-4 text-black/60">{tx.description}</td><td className="whitespace-nowrap px-4 py-4 text-black/50">{new Date(tx.createdAt).toLocaleDateString()}</td></tr>)}</tbody>
         </table>
       </div>
     </section>
@@ -1407,11 +1408,11 @@ function ProfilePage() {
   return (
     <div className="grid gap-5 lg:grid-cols-[360px_1fr]">
       <section className="glass rounded-xl p-5">
-        <UserRound className="mb-4 text-lime-500" size={36} />
+        <UserRound className="mb-4 text-sky-500" size={36} />
         <h2 className="text-3xl font-black">{user.username}</h2>
         <p className="text-black/60">{user.country}</p>
         <div className="mt-4"><TrustScoreBadge score={user.trustScore} /></div>
-        <div className="mt-5 grid gap-3">
+        <div className="profile-stat-strip mt-5 grid grid-cols-2 overflow-hidden rounded-xl bg-[#f6f6f2]">
           <Stat label="Suspicious uploads" value={user.suspiciousUploads} />
           <Stat label="Cancelled matches" value={user.cancelledMatches} />
           <Stat label="Penalties" value={user.penalties} />
@@ -1430,7 +1431,7 @@ function MatchHistory({ history }: { history: { id: string; opponent: string; st
       <div className="mt-4 grid gap-3">
         {history.map((item) => (
           <div key={item.id} className="rounded-lg border border-transparent bg-[#f6f6f2] p-4">
-            <div className="flex flex-wrap items-center justify-between gap-3"><b>vs {item.opponent}</b><span className={item.trustImpact >= 0 ? "text-lime-600" : "text-red-600"}>{item.trustImpact >= 0 ? "+" : ""}{item.trustImpact} trust</span></div>
+            <div className="flex flex-wrap items-center justify-between gap-3"><b>vs {item.opponent}</b><span className={item.trustImpact >= 0 ? "text-sky-600" : "text-red-600"}>{item.trustImpact >= 0 ? "+" : ""}{item.trustImpact} trust</span></div>
             <p className="mt-2 text-sm text-black/60">{item.result} · {item.score} · stake {formatMoney(item.stake)} · payout {formatMoney(item.payout)}</p>
             <p className="mt-1 text-sm text-black/50">{item.evidenceStatus} · {item.date}</p>
           </div>

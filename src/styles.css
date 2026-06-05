@@ -21,6 +21,9 @@
 }
 
 :root {
+  --brand-blue: #3f80f9;
+  --brand-blue-dark: #2563eb;
+  --brand-blue-soft: #eaf2ff;
   color-scheme: light;
   font-family:
     "Glacial Indifference", "glaicalindiefference", "GlacialIndifference",
@@ -81,8 +84,8 @@ button:disabled {
 .brand-logo {
   display: grid;
   place-items: center;
-  background: #a7ff2f;
-  color: #000000;
+  background: var(--brand-blue);
+  color: #ffffff;
   font-weight: 900;
   letter-spacing: -0.04em;
 }
@@ -95,7 +98,7 @@ button:disabled {
   overflow: hidden;
   padding: 4px;
   border-radius: 14px;
-  background: linear-gradient(135deg, #a7ff2f, #4ade80, #16a34a);
+  background: linear-gradient(135deg, var(--brand-blue), #6ea2ff, var(--brand-blue-dark));
 }
 
 .transactions-panel {
@@ -114,23 +117,6 @@ button:disabled {
 
 .wallet-money-row {
   border-left-color: #d6d6d2;
-}
-
-.marketplace-list-toggle-icon {
-  display: grid;
-  width: 24px;
-  height: 20px;
-  align-content: space-between;
-  overflow: hidden;
-  border: 1.5px solid currentColor;
-  border-radius: 5px;
-}
-
-.marketplace-list-toggle-icon span {
-  display: block;
-  width: 100%;
-  height: 1.5px;
-  background: currentColor;
 }
 
 .marketplace-list-sticky-cell {
@@ -166,6 +152,32 @@ img {
 
 :root.dark-theme .stat-card {
   background-color: #181818 !important;
+}
+
+.profile-stat-strip .stat-card {
+  min-width: 0;
+  border: 0;
+  border-radius: 0;
+  background: transparent;
+  padding: 1rem;
+}
+
+.profile-stat-strip .stat-card:nth-child(even) {
+  border-left: 1px solid #d6d6d2;
+}
+
+.profile-stat-strip .stat-card:nth-child(n + 3) {
+  border-top: 1px solid #d6d6d2;
+}
+
+.profile-stat-strip .stat-card p:last-child {
+  overflow-wrap: anywhere;
+  font-size: 1.75rem;
+  line-height: 1.1;
+}
+
+.dashboard-overview-stat-strip .dashboard-stat-item + .dashboard-stat-item {
+  border-left-color: #d6d6d2;
 }
 
 :root.dark-theme .dashboard-stat-strip,
@@ -214,10 +226,10 @@ img {
   background-color: #000000 !important;
 }
 
-:root.dark-theme [class*="bg-lime-50"],
-:root.dark-theme [class*="bg-lime-100"],
-:root.dark-theme [class*="bg-lime-200"] {
-  background-color: #17210c !important;
+:root.dark-theme [class*="bg-sky-50"],
+:root.dark-theme [class*="bg-sky-100"],
+:root.dark-theme [class*="bg-sky-200"] {
+  background-color: #0b1a34 !important;
 }
 
 :root.dark-theme [class*="text-black"] {
@@ -237,17 +249,17 @@ img {
   color: rgba(248, 248, 242, 0.5) !important;
 }
 
-:root.dark-theme .bg-lime-400,
-:root.dark-theme .bg-lime-300,
-:root.dark-theme .bg-lime-400 [class*="text-black"],
-:root.dark-theme .bg-lime-300 [class*="text-black"] {
-  color: #050505 !important;
+:root.dark-theme .bg-sky-600,
+:root.dark-theme .bg-sky-500,
+:root.dark-theme .bg-sky-600 [class*="text-black"],
+:root.dark-theme .bg-sky-500 [class*="text-black"] {
+  color: #ffffff !important;
 }
 
 :root.dark-theme input,
 :root.dark-theme select,
 :root.dark-theme textarea {
-  background-color: #17210c !important;
+  background-color: #0b1a34 !important;
   color: #f8f8f2 !important;
 }
 
@@ -262,6 +274,22 @@ img {
 
 :root.dark-theme .dashboard-stat-item + .dashboard-stat-item {
   border-left-color: rgba(248, 248, 242, 0.24) !important;
+}
+
+:root.dark-theme .dashboard-overview-stat-strip {
+  background-color: #181818 !important;
+}
+
+:root.dark-theme .profile-stat-strip .stat-card {
+  background: transparent !important;
+}
+
+:root.dark-theme .profile-stat-strip .stat-card:nth-child(even) {
+  border-left-color: #3a3a3a !important;
+}
+
+:root.dark-theme .profile-stat-strip .stat-card:nth-child(n + 3) {
+  border-top-color: #3a3a3a !important;
 }
 
 :root.dark-theme thead {

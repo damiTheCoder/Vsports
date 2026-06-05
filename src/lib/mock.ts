@@ -19,7 +19,7 @@ export const users: User[] = [
   {
     id: "u_neo",
     username: "NeoStriker",
-    email: "neo@vsports.test",
+    email: "neo@astro.test",
     country: "Nigeria",
     walletBalance: 240,
     escrowBalance: 0,
@@ -33,7 +33,7 @@ export const users: User[] = [
   {
     id: "u_blaze",
     username: "BlazeFC",
-    email: "blaze@vsports.test",
+    email: "blaze@astro.test",
     country: "Ghana",
     walletBalance: 180,
     escrowBalance: 0,
@@ -47,7 +47,7 @@ export const users: User[] = [
   {
     id: "u_rival",
     username: "RivalKing",
-    email: "rival@vsports.test",
+    email: "rival@astro.test",
     country: "Kenya",
     walletBalance: 320,
     escrowBalance: 0,
@@ -61,7 +61,7 @@ export const users: User[] = [
   {
     id: "u_madrid",
     username: "MadridAce",
-    email: "madrid@vsports.test",
+    email: "madrid@astro.test",
     country: "South Africa",
     walletBalance: 260,
     escrowBalance: 0,
@@ -75,7 +75,7 @@ export const users: User[] = [
   {
     id: "u_barca",
     username: "BarcaBoss",
-    email: "barca@vsports.test",
+    email: "barca@astro.test",
     country: "Nigeria",
     walletBalance: 210,
     escrowBalance: 0,
@@ -89,7 +89,7 @@ export const users: User[] = [
   {
     id: "u_bayern",
     username: "BayernPro",
-    email: "bayern@vsports.test",
+    email: "bayern@astro.test",
     country: "Ghana",
     walletBalance: 290,
     escrowBalance: 0,
@@ -103,7 +103,7 @@ export const users: User[] = [
   {
     id: "u_liverpool",
     username: "KopMaster",
-    email: "kop@vsports.test",
+    email: "kop@astro.test",
     country: "Kenya",
     walletBalance: 225,
     escrowBalance: 0,
@@ -117,7 +117,7 @@ export const users: User[] = [
   {
     id: "u_chelsea",
     username: "BlueBridge",
-    email: "chelsea@vsports.test",
+    email: "chelsea@astro.test",
     country: "Nigeria",
     walletBalance: 245,
     escrowBalance: 0,
