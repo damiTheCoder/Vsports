@@ -10,13 +10,13 @@ import {
   Gamepad2,
   LayoutDashboard,
   LayoutGrid,
-  ListTree,
   LogIn,
   Mic,
   Moon,
   Plus,
   Send,
   ShieldCheck,
+  SquareMenu,
   Store,
   Sun,
   Swords,
@@ -364,7 +364,7 @@ function AppLayout({ children }: { children: ReactNode }) {
 function LandingPage() {
   const setPage = useAppStore((state) => state.setPage);
   const features = [
-    ["Create", "Set the football game, entry amount, rules, and match deadline."],
+    ["Create", "Set the virtual game, entry amount, rules, and match deadline."],
     ["Escrow", "Both players lock the same entry before the match starts."],
     ["Verify", "Upload scoreboard screenshots for AI-assisted result checks."],
     ["Settle", "Apply win, refund, or penalty rules from one match room."],
@@ -372,8 +372,8 @@ function LandingPage() {
   return (
     <div className="landing-page min-h-screen bg-white">
       <div className="grid gap-0 bg-white">
-        <section className="relative mt-0 min-h-screen overflow-hidden bg-sky-500">
-          <img src="/k5.png" alt="Football player artwork" className="absolute inset-0 size-full object-cover" />
+        <section className="landing-hero relative mt-0 min-h-screen overflow-hidden bg-sky-500">
+          <img src="/k5.png" alt="Virtual game artwork" className="absolute inset-0 size-full object-cover" />
           <div className="absolute inset-0 bg-sky-500/25" />
           <div className="pointer-events-none absolute inset-x-0 bottom-0 h-44 bg-gradient-to-b from-transparent via-white/70 to-white" />
           <div className="relative z-10 flex min-h-screen flex-col p-5 sm:p-7 lg:p-9">
@@ -395,28 +395,28 @@ function LandingPage() {
                 Create a proposition, lock equal entries, play the match, upload proof, and let the AI referee guide settlement.
               </p>
             </div>
-            <div className="fixed bottom-6 left-1/2 z-50 flex -translate-x-1/2 items-center gap-2 rounded-2xl bg-white/18 p-2 text-white backdrop-blur-sm">
-              <button onClick={() => setPage("login")} className="rounded-xl bg-white px-5 py-3 text-sm font-bold text-black">
-                Login <span className="ml-2 rounded-lg bg-sky-600 px-2 py-1 text-white">›</span>
+            <div className="fixed bottom-6 left-1/2 z-50 grid w-[min(92vw,440px)] -translate-x-1/2 grid-cols-2 gap-2 rounded-2xl bg-white/18 p-2 text-white backdrop-blur-md">
+              <button onClick={() => setPage("login")} className="min-h-14 rounded-xl bg-white/72 px-3 text-sm font-bold text-black backdrop-blur-md sm:px-5 sm:text-base">
+                Login
               </button>
-              <button onClick={() => setPage("register")} className="rounded-xl bg-sky-600 px-5 py-3 text-sm font-bold text-white">
+              <button onClick={() => setPage("register")} className="min-h-14 rounded-xl bg-sky-600/82 px-3 text-sm font-bold text-white backdrop-blur-md sm:px-5 sm:text-base">
                 Sign up
               </button>
             </div>
           </div>
         </section>
 
-        <section className="px-[7%] py-14">
+        <section className="px-[7%] py-14" id="about">
           <div className="flex items-center gap-4 border-t border-black/10 pt-4 text-xs">
             <span className="grid size-7 place-items-center rounded-full border border-black/20">A</span>
             <span>About</span>
           </div>
           <div className="mt-10 grid gap-8 lg:grid-cols-[1.1fr_0.9fr_0.9fr]">
             <h2 className="text-4xl font-black uppercase leading-none sm:text-5xl">
-              The competition layer for trusted 1v1 football gaming
+              The competition layer for trusted 1v1 virtual gaming
             </h2>
             <p className="text-sm leading-7 text-black/65">
-              Football gamers already compete through group chats and DMs, but payments, proof, disputes, and reputation are messy. Astro gives every challenge a structured flow.
+              Virtual gamers already compete through group chats and DMs, but payments, proof, disputes, and reputation are messy. Astro gives every challenge a structured flow.
             </p>
             <div className="text-sm leading-7 text-black/65">
               <p>Players create propositions, lock entries in escrow, share match codes, upload scoreboard screenshots, and let an AI-assisted referee explain the settlement path.</p>
@@ -427,7 +427,7 @@ function LandingPage() {
           </div>
           <div className="mt-10 grid gap-8 lg:grid-cols-[1.15fr_0.85fr]">
             <div className="relative overflow-hidden rounded-xl border border-black/15">
-              <img src="/Z5.png" alt="Football player artwork" className="h-[520px] w-full object-cover object-center" />
+              <img src="/Z5.png" alt="Virtual game artwork" className="h-[520px] w-full object-cover object-center" />
               <div className="absolute bottom-0 left-0 right-0 grid grid-cols-[1fr_1fr_64px] bg-sky-950/80 text-white">
                 <div className="p-4">
                   <p className="text-2xl font-black text-sky-200">$5+</p>
@@ -441,7 +441,7 @@ function LandingPage() {
               </div>
             </div>
             <div className="grid content-between gap-6">
-              <img src="/Z2.png" alt="Football player artwork" className="h-72 w-full rounded-xl border border-black/15 object-cover object-center" />
+              <img src="/Z2.png" alt="Virtual game artwork" className="h-72 w-full rounded-xl border border-black/15 object-cover object-center" />
               <div>
                 <div className="flex items-end gap-4">
                   <span className="text-8xl font-black text-sky-500">AI</span>
@@ -459,13 +459,14 @@ function LandingPage() {
 
         <section className="px-[7%] py-14">
           <div>
-            <div className="overflow-hidden rounded-xl">
+            <picture className="block overflow-hidden rounded-xl shadow-[0_22px_60px_rgba(15,23,42,0.18)] ring-1 ring-black/10">
+              <source media="(max-width: 767px)" srcSet="/R3.png" />
               <img
                 src="/R4.png"
                 alt="Astro match preview"
                 className="w-full object-cover"
               />
-            </div>
+            </picture>
           </div>
         </section>
 
@@ -477,15 +478,15 @@ function LandingPage() {
           <h2 className="mt-10 max-w-3xl text-4xl font-black uppercase leading-none sm:text-5xl">From challenge to settlement in one flow.</h2>
           <div className="mt-10 grid gap-4 lg:grid-cols-3">
             <div className="overflow-hidden rounded-xl border border-black/15 bg-[#f6f6f2]">
-              <img src="/Z5.png" alt="Football player artwork" className="h-72 w-full object-cover object-center" />
+              <img src="/Z5.png" alt="Virtual game artwork" className="h-72 w-full object-cover object-center" />
               <p className="p-4 text-xl font-bold">Create a challenge</p>
             </div>
             <div className="overflow-hidden rounded-xl border border-black/15 bg-[#f6f6f2]">
-              <img src="/Z4.jpeg" alt="Football player artwork" className="h-72 w-full object-cover object-center" />
+              <img src="/Z4.jpeg" alt="Virtual game artwork" className="h-72 w-full object-cover object-center" />
               <p className="p-4 text-xl font-bold">Accept and lock escrow</p>
             </div>
             <div className="overflow-hidden rounded-xl border border-black/15 bg-[#f6f6f2]">
-              <img src="/Z1.jpeg" alt="Football player artwork" className="h-72 w-full object-cover object-center" />
+              <img src="/Z1.jpeg" alt="Virtual game artwork" className="h-72 w-full object-cover object-center" />
               <p className="p-4 text-xl font-bold">Upload proof and settle</p>
             </div>
           </div>
@@ -836,7 +837,7 @@ function Marketplace() {
             title={viewMode === "grid" ? "List view" : "Grid view"}
           >
             {viewMode === "grid" ? (
-              <ListTree size={24} strokeWidth={2.2} />
+              <SquareMenu size={25} strokeWidth={2.8} />
             ) : (
               <LayoutGrid size={23} strokeWidth={2.2} />
             )}
@@ -998,6 +999,22 @@ function CountdownTimer() {
   return <div className="inline-flex items-center gap-2 rounded-full border border-transparent bg-sky-200/70 px-3 py-1 text-sm text-black"><Clock3 size={16} /> 09:58 evidence window</div>;
 }
 
+function MatchRoomStatStrip({ stats }: { stats: [string, ReactNode][] }) {
+  return (
+    <div className="mt-3 grid grid-cols-4 overflow-hidden rounded-xl bg-[#f6f6f2]">
+      {stats.map(([label, value], index) => (
+        <div
+          key={label}
+          className={`dashboard-stat-item min-w-0 px-1.5 py-3 text-center sm:p-4 ${index > 0 ? "border-l border-black/20" : ""}`}
+        >
+          <p className="truncate text-[9px] leading-tight text-black/60 min-[380px]:text-[10px] sm:text-sm">{label}</p>
+          <p className="mt-1 truncate text-base font-black leading-none min-[380px]:text-lg sm:text-2xl">{value}</p>
+        </div>
+      ))}
+    </div>
+  );
+}
+
 function AIChatRoom({ room, challenge }: { room: MatchRoom; challenge: Challenge }) {
   const users = useAppStore((state) => state.users);
   const currentUser = useAppStore((state) => state.currentUser);
@@ -1029,18 +1046,22 @@ function AIChatRoom({ room, challenge }: { room: MatchRoom; challenge: Challenge
             <CountdownTimer />
           </div>
         </div>
-        <div className="mt-4 grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
-          <Stat label="Stake each" value={formatMoney(challenge.stakeAmount)} />
-          <Stat label="Escrow output" value={formatMoney(challenge.prizePool)} />
-          <Stat label="Tier rating" value={challenge.squadRatingLimit} />
-          <Stat label="Match code" value={room.matchCode ?? "Not shared"} />
-        </div>
-        <div className="mt-3 grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
-          <Stat label="Player A" value={playerOne?.username ?? "Waiting"} />
-          <Stat label="Player B" value={playerTwo?.username ?? "Waiting"} />
-          <Stat label="Total escrow" value={formatMoney(challenge.prizePool)} />
-          <Stat label="Next action" value={nextAction(room.status)} />
-        </div>
+        <MatchRoomStatStrip
+          stats={[
+            ["Stake each", formatMoney(challenge.stakeAmount)],
+            ["Escrow output", formatMoney(challenge.prizePool)],
+            ["Tier rating", challenge.squadRatingLimit],
+            ["Match code", room.matchCode ?? "Not shared"],
+          ]}
+        />
+        <MatchRoomStatStrip
+          stats={[
+            ["Player A", playerOne?.username ?? "Waiting"],
+            ["Player B", playerTwo?.username ?? "Waiting"],
+            ["Total escrow", formatMoney(challenge.prizePool)],
+            ["Next action", nextAction(room.status)],
+          ]}
+        />
       </div>
       <div className="max-h-[520px] overflow-y-auto px-3 py-3 sm:px-4">
         <div className="grid gap-3">
@@ -1451,6 +1472,53 @@ function App() {
     window.addEventListener("popstate", syncRoute);
     return () => window.removeEventListener("popstate", syncRoute);
   }, []);
+  useEffect(() => {
+    if (!("IntersectionObserver" in window)) return;
+
+    const revealSelector = [
+      ".landing-page section:not(:first-child)",
+      ".landing-page footer",
+      "main > div > *",
+      "main section",
+      "main article",
+      "main form",
+      "main .glass",
+      "main .listed-game-card",
+      "main .transactions-panel",
+    ].join(", ");
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            entry.target.classList.add("scroll-reveal-visible");
+            observer.unobserve(entry.target);
+          }
+        });
+      },
+      { rootMargin: "0px 0px -8% 0px", threshold: 0.12 },
+    );
+
+    const revealElements = Array.from(document.querySelectorAll<HTMLElement>(revealSelector));
+    revealElements.forEach((element, index) => {
+      element.classList.add("scroll-reveal");
+      element.style.setProperty("--scroll-reveal-delay", `${Math.min(index % 6, 5) * 55}ms`);
+      observer.observe(element);
+    });
+
+    return () => {
+      observer.disconnect();
+      revealElements.forEach((element) => {
+        element.classList.remove("scroll-reveal", "scroll-reveal-visible");
+        element.style.removeProperty("--scroll-reveal-delay");
+      });
+    };
+  }, [page]);
+  useEffect(() => {
+    if (page === "landing") {
+      document.documentElement.classList.remove("dark-theme");
+    }
+  }, [page]);
   const content = {
     landing: <LandingPage />,
     login: <AuthScreen mode="login" />,
