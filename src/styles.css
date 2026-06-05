@@ -299,3 +299,29 @@ img {
 :root.dark-theme .banner-fade {
   background: linear-gradient(to bottom, transparent, #000000);
 }
+
+:root.dark-theme .landing-page,
+:root.dark-theme .landing-page [class*="bg-white"] {
+  background-color: #ffffff !important;
+}
+
+:root.dark-theme .landing-page [class*="bg-[#f6f6f2]"] {
+  background-color: #f6f6f2 !important;
+}
+
+:root.dark-theme .landing-page [class*="text-black"] {
+  color: #050505 !important;
+}
+
+:root.dark-theme .landing-page [class*="text-black/40"],
+:root.dark-theme .landing-page [class*="text-black/45"],
+:root.dark-theme .landing-page [class*="text-black/50"] {
+  color: rgba(5, 5, 5, 0.5) !important;
+}
+
+:root.dark-theme .landing-page [class*="text-black/60"],
+:root.dark-theme .landing-page [class*="text-black/65"],
+:root.dark-theme .landing-page [class*="text-black/70"],
+:root.dark-theme .landing-page [class*="text-black/80"] {
+  color: rgba(5, 5, 5, 0.68) !important;
+}

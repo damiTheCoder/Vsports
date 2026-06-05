@@ -370,7 +370,7 @@ function LandingPage() {
     ["Settle", "Apply win, refund, or penalty rules from one match room."],
   ];
   return (
-    <div className="min-h-screen bg-white">
+    <div className="landing-page min-h-screen bg-white">
       <div className="grid gap-0 bg-white">
         <section className="relative mt-0 min-h-screen overflow-hidden bg-sky-500">
           <img src="/k5.png" alt="Football player artwork" className="absolute inset-0 size-full object-cover" />
@@ -477,15 +477,15 @@ function LandingPage() {
           <h2 className="mt-10 max-w-3xl text-4xl font-black uppercase leading-none sm:text-5xl">From challenge to settlement in one flow.</h2>
           <div className="mt-10 grid gap-4 lg:grid-cols-3">
             <div className="overflow-hidden rounded-xl border border-black/15 bg-[#f6f6f2]">
-              <img src="/K3.jpeg" alt="Football player artwork" className="h-72 w-full object-cover" />
+              <img src="/Z5.png" alt="Football player artwork" className="h-72 w-full object-cover object-center" />
               <p className="p-4 text-xl font-bold">Create a challenge</p>
             </div>
             <div className="overflow-hidden rounded-xl border border-black/15 bg-[#f6f6f2]">
-              <img src="/k4.jpeg" alt="Football player artwork" className="h-72 w-full object-cover" />
+              <img src="/Z4.jpeg" alt="Football player artwork" className="h-72 w-full object-cover object-center" />
               <p className="p-4 text-xl font-bold">Accept and lock escrow</p>
             </div>
             <div className="overflow-hidden rounded-xl border border-black/15 bg-[#f6f6f2]">
-              <img src="/k7.jpeg" alt="Football player artwork" className="h-72 w-full object-cover" />
+              <img src="/Z1.jpeg" alt="Football player artwork" className="h-72 w-full object-cover object-center" />
               <p className="p-4 text-xl font-bold">Upload proof and settle</p>
             </div>
           </div>
