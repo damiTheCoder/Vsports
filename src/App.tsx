@@ -822,8 +822,8 @@ function Marketplace() {
       .sort((a, b) => (filter.sort === "highest" ? b.prizePool - a.prizePool : 0));
   }, [challenges, filter]);
   return (
-    <div className="dashboard-page grid gap-5">
-      <div className="px-5">
+    <div className="dashboard-page -mx-1 grid gap-5 px-1 sm:-mx-2 sm:px-2 lg:-mx-3 lg:px-3">
+      <div>
         <div className="flex items-start justify-between gap-4">
           <div className="min-w-0">
             <h2 className="text-3xl font-black">Marketplace</h2>
@@ -884,7 +884,7 @@ function Marketplace() {
       {viewMode === "grid" ? (
         <div className="grid gap-4 lg:grid-cols-2">{filtered.map((challenge) => <ChallengeCard key={challenge.id} challenge={challenge} />)}</div>
       ) : (
-        <div className="-mx-3 grid grid-cols-[240px_minmax(0,1fr)] sm:-mx-4 sm:grid-cols-[280px_minmax(0,1fr)] lg:-mx-5 lg:grid-cols-4">
+        <div className="grid grid-cols-[240px_minmax(0,1fr)] sm:grid-cols-[280px_minmax(0,1fr)] lg:grid-cols-4">
           <div className="min-w-0">
             <div className="marketplace-list-header px-5 py-2 text-xs font-bold uppercase tracking-wide text-black/50">
               1v1 Proposition
@@ -999,13 +999,84 @@ function CountdownTimer() {
   return <div className="inline-flex items-center gap-2 rounded-full border border-transparent bg-sky-200/70 px-3 py-1 text-sm text-black"><Clock3 size={16} /> 09:58 evidence window</div>;
 }
 
+function CryptoStakeChart({
+  challenge,
+  playerOneName,
+  playerTwoName,
+}: {
+  challenge: Challenge;
+  playerOneName: string;
+  playerTwoName: string;
+}) {
+  const tickers = [
+    { symbol: "USDC", price: challenge.stakeAmount, change: "+0.08%" },
+    { symbol: "GUSD", price: challenge.stakeAmount, change: "+0.02%" },
+  ];
+  const bars = [38, 52, 47, 66, 58, 74, 69, 82, 76, 91];
+
+  return (
+    <section className="glass overflow-hidden rounded-xl bg-white p-3">
+      <div className="grid gap-3 lg:grid-cols-[1fr_260px]">
+        <div className="min-w-0">
+          <div className="flex items-start gap-2.5">
+            <img className="size-12 rounded-full object-contain" src="/usdc.png" alt="" />
+            <div className="min-w-0">
+              <div className="flex min-w-0 items-center gap-2">
+                <h3 className="truncate text-xl font-black text-black sm:text-2xl">
+                  {playerOneName} vs {playerTwoName}
+                </h3>
+                <img className="size-5 shrink-0 object-contain" src="/checklist.png" alt="Verified" />
+              </div>
+              <p className="mt-1.5 flex flex-wrap items-center gap-2 text-xs font-bold text-black/60">
+                <span className="inline-flex items-center gap-2">
+                  <span className="size-2 rounded-full bg-blue-400" />
+                  Live Chart
+                </span>
+                <span className="size-1 rounded-full bg-slate-500" />
+                <span>Cycle 1</span>
+              </p>
+            </div>
+          </div>
+          <p className="mt-5 text-4xl font-black text-black">{formatMoney(challenge.prizePool)}</p>
+          <div className="mt-3 flex h-36 items-end gap-2 overflow-hidden rounded-lg bg-white px-3 py-2">
+            {bars.map((height, index) => (
+              <div
+                key={`${height}-${index}`}
+                className="min-w-0 flex-1 rounded-t bg-sky-200"
+                style={{ height: `${height}%` }}
+                aria-hidden="true"
+              />
+            ))}
+          </div>
+        </div>
+        <div className="grid gap-3 self-end">
+          <div className="grid gap-3 self-end sm:grid-cols-2 lg:w-full lg:grid-cols-1">
+            {tickers.map((ticker) => (
+              <div key={ticker.symbol} className="flex items-center justify-between rounded-lg bg-white px-3 py-2.5">
+                <div className="flex items-center gap-2">
+                  <img className="size-8 rounded-full object-contain" src="/usdc.png" alt="" />
+                  <span className="font-black">{ticker.symbol}</span>
+                </div>
+                <div className="text-right">
+                  <p className="font-black">{formatMoney(ticker.price)}</p>
+                  <p className="text-xs font-bold text-emerald-600">{ticker.change}</p>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      </div>
+    </section>
+  );
+}
+
 function MatchRoomStatStrip({ stats }: { stats: [string, ReactNode][] }) {
   return (
-    <div className="mt-3 grid grid-cols-4 overflow-hidden rounded-xl bg-[#f6f6f2]">
+    <div className="match-room-stat-strip mt-3 grid grid-cols-3 overflow-hidden rounded-xl bg-[#f6f6f2] sm:grid-cols-4">
       {stats.map(([label, value], index) => (
         <div
           key={label}
-          className={`dashboard-stat-item min-w-0 px-1.5 py-3 text-center sm:p-4 ${index > 0 ? "border-l border-black/20" : ""}`}
+          className={`dashboard-stat-item min-w-0 px-1.5 py-3 text-center sm:p-4 ${index === 3 ? "hidden sm:block" : ""} ${index > 0 ? "border-l" : ""}`}
         >
           <p className="truncate text-[9px] leading-tight text-black/60 min-[380px]:text-[10px] sm:text-sm">{label}</p>
           <p className="mt-1 truncate text-base font-black leading-none min-[380px]:text-lg sm:text-2xl">{value}</p>
@@ -1087,9 +1158,9 @@ function AIChatRoom({ room, challenge }: { room: MatchRoom; challenge: Challenge
           />
           <button className="text-xl font-bold" onClick={() => sendRoomMoney(room.id, transferAmount)}>Send</button>
         </div>
-        <div className="mt-3 rounded-[28px] bg-white p-3 ring-1 ring-black/10 sm:p-4">
+        <div className="chat-composer mt-3 rounded-2xl bg-white px-3 py-2.5 ring-1 ring-black/10 sm:px-4 sm:py-3">
           <input
-            className="min-h-12 w-full bg-transparent text-xl text-black outline-none placeholder:text-black/45"
+            className="chat-composer-input min-h-9 w-full bg-transparent text-base text-black outline-none placeholder:text-black/45 sm:text-lg"
             value={message}
             onChange={(e) => setMessage(e.target.value)}
             onKeyDown={(e) => {
@@ -1097,28 +1168,28 @@ function AIChatRoom({ room, challenge }: { room: MatchRoom; challenge: Challenge
             }}
             placeholder="Ask anything"
           />
-          <div className="mt-3 flex items-center gap-3">
+          <div className="mt-2 flex items-center gap-2">
             <button
-              className="grid size-11 place-items-center rounded-full text-black transition hover:bg-sky-50"
+              className="grid size-9 shrink-0 place-items-center rounded-full text-black transition hover:bg-sky-50"
               onClick={() => uploadEvidence(room.id, currentSlot, `${currentSlot}-scoreboard.png`)}
               aria-label="Upload screenshot"
             >
-              <Plus size={30} strokeWidth={1.8} />
+              <Plus size={22} strokeWidth={1.9} />
             </button>
-            <span className="ml-auto text-lg text-black/45">Referee</span>
-            <span className="text-lg text-black/45">@refree</span>
-            <button className="grid size-11 place-items-center rounded-full text-black transition hover:bg-sky-50" aria-label="Voice message">
-              <Mic size={26} />
+            <span className="ml-auto hidden text-sm font-bold text-black/45 min-[420px]:inline">Referee</span>
+            <span className="text-sm font-bold text-black/45">@refree</span>
+            <button className="grid size-9 shrink-0 place-items-center rounded-full text-black transition hover:bg-sky-50" aria-label="Voice message">
+              <Mic size={20} />
             </button>
             <button
-              className="grid size-14 place-items-center rounded-full bg-black/5 text-black transition hover:bg-sky-200"
+              className="grid size-11 shrink-0 place-items-center rounded-full bg-sky-50 text-black transition hover:bg-sky-200"
               onClick={sendMessage}
               aria-label="Send message"
             >
-              <Send size={24} />
+              <Send size={21} />
             </button>
           </div>
-          <p className="mt-2 px-1 text-xs text-black/50">Plus uploads a scoreboard screenshot. Use @refree when replying to the AI.</p>
+          <p className="mt-1.5 truncate px-1 text-[11px] text-black/50 sm:text-xs">Plus uploads a scoreboard screenshot. Use @refree when replying to the AI.</p>
         </div>
       </div>
     </section>
@@ -1275,6 +1346,7 @@ function MatchRooms() {
   const rooms = useAppStore((state) => state.rooms);
   const selectedRoomId = useAppStore((state) => state.selectedRoomId);
   const challenges = useAppStore((state) => state.challenges);
+  const users = useAppStore((state) => state.users);
   const selectRoom = useAppStore((state) => state.selectRoom);
   const room = rooms.find((item) => item.id === selectedRoomId);
   if (rooms.length === 0) {
@@ -1309,33 +1381,14 @@ function MatchRooms() {
   }
 
   const challenge = challenges.find((item) => item.id === room.challengeId)!;
+  const playerOneName = users.find((user) => user.id === room.playerOneId)?.username ?? "Player A";
+  const playerTwoName = users.find((user) => user.id === room.playerTwoId)?.username ?? "Player B";
   return (
-    <div className="grid gap-4 lg:grid-cols-[320px_1fr]">
-      <section className="glass rounded-xl p-4">
-        <div className="flex items-center justify-between">
-          <h3 className="text-lg font-black">Your match rooms</h3>
-          <button
-            className="text-xs font-bold text-black/60"
-            onClick={() => selectRoom("")}
-          >
-            Clear
-          </button>
-        </div>
-        <p className="mt-1 text-sm text-black/60">Select a room to enter.</p>
-        <div className="mt-4 grid gap-2">
-          {rooms.map((item) => (
-            <button
-              key={item.id}
-              onClick={() => selectRoom(item.id)}
-              className={`flex items-center justify-between rounded-lg border border-transparent px-3 py-3 text-left text-sm ${item.id === room.id ? "bg-sky-50" : "bg-[#f6f6f2]"}`}
-            >
-              <span>Room {item.id.slice(-4)}</span>
-              <MatchStatusBadge status={item.status} />
-            </button>
-          ))}
-        </div>
-      </section>
-      <AIChatRoom room={room} challenge={challenge} />
+    <div className="grid gap-4">
+      <CryptoStakeChart challenge={challenge} playerOneName={playerOneName} playerTwoName={playerTwoName} />
+      <div className="grid gap-4">
+        <AIChatRoom room={room} challenge={challenge} />
+      </div>
     </div>
   );
 }
@@ -1425,19 +1478,105 @@ function TransactionTable({ transactions }: { transactions: { id: string; type: 
 function ProfilePage() {
   const user = useAppStore((state) => state.currentUser);
   const history = useAppStore((state) => state.history);
+  const [isEditing, setIsEditing] = useState(false);
+  const [profileForm, setProfileForm] = useState({ username: "", country: "", bio: "" });
+  useEffect(() => {
+    if (!user) return;
+    setProfileForm({
+      username: user.username,
+      country: user.country,
+      bio: user.bio ?? "Verified Astro player. Trust-first 1v1 competitor with escrow-backed matches and AI-reviewed evidence.",
+    });
+  }, [user]);
   if (!user) return <AuthGate />;
+  const totalMatches = user.wins + user.losses;
+  const followers = 120 + user.wins * 9 + user.trustScore;
+  const following = 36 + user.losses * 4 + user.cancelledMatches;
+  const winRate = totalMatches > 0 ? Math.round((user.wins / totalMatches) * 100) : 0;
+  const profileBio = user.bio ?? "Verified Astro player. Trust-first 1v1 competitor with escrow-backed matches and AI-reviewed evidence.";
+  const saveProfile = (event: FormEvent) => {
+    event.preventDefault();
+    const patch = {
+      username: profileForm.username.trim() || user.username,
+      country: profileForm.country.trim() || user.country,
+      bio: profileForm.bio.trim() || profileBio,
+    };
+    useAppStore.setState((state) => ({
+      currentUser: { ...user, ...patch },
+      users: state.users.map((item) => (item.id === user.id ? { ...item, ...patch } : item)),
+    }));
+    setIsEditing(false);
+  };
   return (
-    <div className="grid gap-5 lg:grid-cols-[360px_1fr]">
-      <section className="glass rounded-xl p-5">
-        <UserRound className="mb-4 text-sky-500" size={36} />
-        <h2 className="text-3xl font-black">{user.username}</h2>
-        <p className="text-black/60">{user.country}</p>
-        <div className="mt-4"><TrustScoreBadge score={user.trustScore} /></div>
-        <div className="profile-stat-strip mt-5 grid grid-cols-2 overflow-hidden rounded-xl bg-[#f6f6f2]">
-          <Stat label="Suspicious uploads" value={user.suspiciousUploads} />
-          <Stat label="Cancelled matches" value={user.cancelledMatches} />
-          <Stat label="Penalties" value={user.penalties} />
-          <Stat label="Verification status" value={user.suspiciousUploads >= 3 ? "Restricted" : "Verified"} />
+    <div className="grid gap-5">
+      <section className="glass overflow-hidden rounded-xl">
+        <div className="h-32 bg-gradient-to-r from-sky-200 via-blue-100 to-slate-100 sm:h-44" />
+        <div className="px-4 pb-5 sm:px-6">
+          <div className="-mt-12 flex items-end justify-between gap-3 sm:-mt-16">
+            <div className="grid size-24 place-items-center rounded-full border-4 border-white bg-sky-500 text-white sm:size-32">
+              <UserRound size={48} strokeWidth={1.8} />
+            </div>
+            <button
+              className="rounded-full bg-black px-5 py-2 text-sm font-black text-white transition hover:bg-black/80"
+              onClick={() => setIsEditing(true)}
+            >
+              Edit profile
+            </button>
+          </div>
+          <div className="mt-3 flex flex-wrap items-start justify-between gap-4">
+            <div className="min-w-0">
+              <div className="flex min-w-0 items-center gap-2">
+                <h2 className="truncate text-3xl font-black text-black">{user.username}</h2>
+                <CheckCircle2 className="shrink-0 fill-blue-500 text-white" size={22} strokeWidth={3} />
+              </div>
+              <p className="text-sm font-bold text-black/50">@{user.username.toLowerCase()} · {user.country}</p>
+              <p className="mt-3 max-w-2xl text-sm text-black/70">{profileBio}</p>
+              <div className="mt-4 flex flex-wrap gap-x-5 gap-y-2 text-sm">
+                <span><b className="text-black">{following.toLocaleString()}</b> <span className="text-black/60">Following</span></span>
+                <span><b className="text-black">{followers.toLocaleString()}</b> <span className="text-black/60">Followers</span></span>
+              </div>
+            </div>
+            <div className="flex shrink-0 items-center gap-2">
+              <TrustScoreBadge score={user.trustScore} />
+            </div>
+          </div>
+          {isEditing && (
+            <form className="mt-5 grid gap-3 rounded-xl bg-[#f6f6f2] p-4" onSubmit={saveProfile}>
+              <div className="grid gap-3 sm:grid-cols-2">
+                <Field label="Display name">
+                  <input
+                    className={inputClass()}
+                    value={profileForm.username}
+                    onChange={(event) => setProfileForm({ ...profileForm, username: event.target.value })}
+                  />
+                </Field>
+                <Field label="Country">
+                  <input
+                    className={inputClass()}
+                    value={profileForm.country}
+                    onChange={(event) => setProfileForm({ ...profileForm, country: event.target.value })}
+                  />
+                </Field>
+              </div>
+              <Field label="Bio">
+                <textarea
+                  className={`${inputClass()} min-h-24 py-3`}
+                  value={profileForm.bio}
+                  onChange={(event) => setProfileForm({ ...profileForm, bio: event.target.value })}
+                />
+              </Field>
+              <div className="flex flex-wrap justify-end gap-2">
+                <Button type="button" variant="ghost" onClick={() => setIsEditing(false)}>Cancel</Button>
+                <Button type="submit">Save profile</Button>
+              </div>
+            </form>
+          )}
+          <div className="profile-stat-strip mt-5 grid grid-cols-2 overflow-hidden rounded-xl bg-[#f6f6f2] sm:grid-cols-4">
+            <Stat label="Wins" value={user.wins} />
+            <Stat label="Losses" value={user.losses} />
+            <Stat label="Win rate" value={`${winRate}%`} />
+            <Stat label="Status" value={user.suspiciousUploads >= 3 ? "Restricted" : "Verified"} />
+          </div>
         </div>
       </section>
       <MatchHistory history={history} />

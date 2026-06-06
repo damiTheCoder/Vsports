@@ -213,6 +213,10 @@ img {
   border-left-color: #d6d6d2;
 }
 
+.match-room-stat-strip .dashboard-stat-item + .dashboard-stat-item {
+  border-left-color: #d6d6d2;
+}
+
 :root.dark-theme .dashboard-stat-strip,
 :root.dark-theme .dashboard-stat-item,
 :root.dark-theme .wallet-mini-stat,
@@ -298,6 +302,20 @@ img {
 
 :root.dark-theme input::placeholder,
 :root.dark-theme textarea::placeholder {
+  color: rgba(248, 248, 242, 0.45) !important;
+}
+
+:root.dark-theme .chat-composer {
+  background-color: #111111 !important;
+  box-shadow: none !important;
+}
+
+:root.dark-theme .chat-composer-input {
+  background-color: transparent !important;
+  color: #f8f8f2 !important;
+}
+
+:root.dark-theme .chat-composer-input::placeholder {
   color: rgba(248, 248, 242, 0.45) !important;
 }
 

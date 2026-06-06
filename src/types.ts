@@ -45,6 +45,7 @@ export interface User {
   username: string;
   email: string;
   country: string;
+  bio?: string;
   walletBalance: number;
   escrowBalance: number;
   trustScore: number;
