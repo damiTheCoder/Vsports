@@ -114,11 +114,6 @@ button:disabled {
   background: #ecece8;
 }
 
-.marketplace-list-header,
-.marketplace-list-row {
-  border-bottom-color: #d6d6d2;
-}
-
 .wallet-money-row {
   border-left-color: #d6d6d2;
 }
@@ -128,6 +123,14 @@ button:disabled {
   left: 0;
   z-index: 1;
   background: #ffffff;
+}
+
+.marketplace-filter-tab {
+  line-height: 1;
+}
+
+.marketplace-filter-tab-active {
+  background-color: #f6f6f2;
 }
 
 * {
@@ -195,18 +198,26 @@ img {
   padding: 1rem;
 }
 
-.profile-stat-strip .stat-card:nth-child(even) {
+.profile-stat-strip .stat-card + .stat-card {
   border-left: 1px solid #d6d6d2;
-}
-
-.profile-stat-strip .stat-card:nth-child(n + 3) {
-  border-top: 1px solid #d6d6d2;
 }
 
 .profile-stat-strip .stat-card p:last-child {
   overflow-wrap: anywhere;
-  font-size: 1.75rem;
+  font-size: clamp(1.15rem, 4vw, 1.75rem);
   line-height: 1.1;
+}
+
+.profile-chart-inner {
+  background-color: #ffffff;
+}
+
+.profile-chart-card {
+  background-color: transparent;
+}
+
+.profile-data-panel {
+  background-color: #f6f6f2;
 }
 
 .dashboard-overview-stat-strip .dashboard-stat-item + .dashboard-stat-item {
@@ -237,17 +248,25 @@ img {
   background-color: #242424 !important;
 }
 
-:root.dark-theme .marketplace-list-header,
-:root.dark-theme .marketplace-list-row {
-  border-bottom-color: #3a3a3a !important;
-}
-
 :root.dark-theme [class*="border-black/15"] {
   border-color: #3a3a3a !important;
 }
 
 :root.dark-theme .marketplace-list-sticky-cell {
   background: #000000 !important;
+}
+
+:root.dark-theme .marketplace-filter-tab {
+  color: rgba(248, 248, 242, 0.52) !important;
+}
+
+:root.dark-theme .marketplace-filter-tab:hover {
+  color: rgba(248, 248, 242, 0.9) !important;
+}
+
+:root.dark-theme .marketplace-filter-tab-active {
+  background-color: #242833 !important;
+  color: #ffffff !important;
 }
 
 :root.dark-theme .app-shell,
@@ -261,6 +280,12 @@ img {
 :root.dark-theme .top-nav-bar,
 :root.dark-theme .top-nav-bar [class*="bg-white"] {
   background-color: #000000 !important;
+}
+
+:root.dark-theme .top-nav-bar [role="menu"],
+:root.dark-theme .top-nav-bar [aria-haspopup="menu"] + div {
+  background-color: #111111 !important;
+  border-color: #2a2a2a !important;
 }
 
 :root.dark-theme [class*="bg-sky-50"],
@@ -335,12 +360,20 @@ img {
   background: transparent !important;
 }
 
-:root.dark-theme .profile-stat-strip .stat-card:nth-child(even) {
-  border-left-color: #3a3a3a !important;
+:root.dark-theme .profile-data-panel {
+  background-color: #181818 !important;
 }
 
-:root.dark-theme .profile-stat-strip .stat-card:nth-child(n + 3) {
-  border-top-color: #3a3a3a !important;
+:root.dark-theme .profile-chart-card {
+  background-color: transparent !important;
+}
+
+:root.dark-theme .profile-chart-inner {
+  background-color: #000000 !important;
+}
+
+:root.dark-theme .profile-stat-strip .stat-card + .stat-card {
+  border-left-color: #3a3a3a !important;
 }
 
 :root.dark-theme thead {

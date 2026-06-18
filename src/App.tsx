@@ -11,6 +11,7 @@ import {
   LayoutDashboard,
   LayoutGrid,
   LogIn,
+  LogOut,
   Mic,
   Moon,
   Plus,
@@ -57,31 +58,31 @@ const navIconCompactClass =
 
 const propositionTeams: Record<string, { logoSrc: string; teamName: string }> = {
   ch_1: {
-    logoSrc: "/New%20Manchester%20City%20Crest%20Revealed.jpeg",
+    logoSrc: "/V1.jpeg",
     teamName: "Manchester City",
   },
   ch_2: {
-    logoSrc: "/Manchester%20United%20Logo%20and%20symbol,%20meaning,%20history,%20PNG,%20brand.jpeg",
+    logoSrc: "/V2.jpeg",
     teamName: "Manchester United",
   },
   ch_3: {
-    logoSrc: "/Real%20Madrid%20_.jpeg",
+    logoSrc: "/V3.jpeg",
     teamName: "Real Madrid",
   },
   ch_4: {
-    logoSrc: "/Barca.jpeg",
+    logoSrc: "/V4.jpeg",
     teamName: "Barcelona",
   },
   ch_5: {
-    logoSrc: "/FC%20Bayern%20Munich.jpeg",
+    logoSrc: "/V5.jpeg",
     teamName: "Bayern Munich",
   },
   ch_6: {
-    logoSrc: "/Liverpool%20Football%20Club.jpeg",
+    logoSrc: "/V6.jpeg",
     teamName: "Liverpool",
   },
   ch_7: {
-    logoSrc: "/chelsea%20fc%20logo%20-%20Google%20Search.jpeg",
+    logoSrc: "/V7.jpeg",
     teamName: "Chelsea",
   },
 };
@@ -96,7 +97,7 @@ function BrandMark({ size = "md" }: { size?: "sm" | "md" | "lg" }) {
     <img
       src="/r1.png"
       alt="Astro logo"
-      className={`${dimensions} rounded-lg object-cover`}
+      className={`${dimensions} rounded-full object-cover`}
     />
   );
 }
@@ -150,7 +151,7 @@ function inputClass() {
   return "min-h-11 rounded-lg border border-transparent bg-sky-50 px-3 text-black outline-none transition focus:bg-sky-50";
 }
 
-function SelectControl({
+function FilterTabs({
   value,
   onChange,
   options,
@@ -160,22 +161,25 @@ function SelectControl({
   options: { value: string; label: string }[];
 }) {
   return (
-    <label className="relative block min-w-0">
-      <select
-        className="min-h-11 w-full appearance-none rounded-xl border border-transparent bg-sky-50 py-2 pl-3 pr-10 text-black outline-none transition focus:bg-sky-100"
-        value={value}
-        onChange={(event) => onChange(event.target.value)}
-      >
-        {options.map((option) => (
-          <option key={option.value} value={option.value}>
+    <div className="no-scrollbar flex max-w-full gap-4 overflow-x-auto py-1 text-sm font-bold sm:gap-6 sm:text-base">
+      {options.map((option) => {
+        const isActive = option.value === value;
+        return (
+          <button
+            key={option.value}
+            type="button"
+            onClick={() => onChange(option.value)}
+            className={`marketplace-filter-tab min-h-9 shrink-0 rounded-lg px-3 text-left transition ${
+              isActive
+                ? "marketplace-filter-tab-active bg-[#f6f6f2] text-black"
+                : "text-black/45 hover:text-black"
+            }`}
+          >
             {option.label}
-          </option>
-        ))}
-      </select>
-      <span className="pointer-events-none absolute right-2 top-1/2 grid size-7 -translate-y-1/2 place-items-center rounded-full bg-white/70 text-black">
-        <ChevronDown size={16} strokeWidth={2.5} />
-      </span>
-    </label>
+          </button>
+        );
+      })}
+    </div>
   );
 }
 
@@ -267,6 +271,7 @@ function TopNav() {
   const page = useAppStore((state) => state.page);
   const setPage = useAppStore((state) => state.setPage);
   const logout = useAppStore((state) => state.logout);
+  const [isProfileMenuOpen, setIsProfileMenuOpen] = useState(false);
   const [isDarkTheme, setIsDarkTheme] = useState(() => {
     return window.localStorage.getItem("astro-theme") === "dark";
   });
@@ -293,11 +298,47 @@ function TopNav() {
             {isDarkTheme ? <Sun size={18} /> : <Moon size={18} />}
           </button>
           {currentUser ? (
-            <>
-              <span className="hidden text-sm text-black/80 sm:block">{currentUser.username}</span>
-              <TrustScoreBadge score={currentUser.trustScore} />
-              <Button variant="ghost" onClick={logout}>Logout</Button>
-            </>
+            <div className="relative">
+              <button
+                type="button"
+                onClick={() => setIsProfileMenuOpen((open) => !open)}
+                className="inline-flex min-h-10 items-center justify-center gap-2 rounded-xl bg-sky-50 px-3 py-2 text-sm font-bold text-black transition hover:bg-sky-100 sm:min-h-11 sm:px-4"
+                aria-expanded={isProfileMenuOpen}
+                aria-haspopup="menu"
+              >
+                <UserRound size={16} />
+                Profile
+                <ChevronDown size={15} strokeWidth={2.6} />
+              </button>
+              {isProfileMenuOpen && (
+                <div className="absolute right-0 z-50 mt-2 grid w-40 gap-1 rounded-xl bg-white p-2 shadow-xl shadow-black/10 ring-1 ring-black/10" role="menu">
+                  <button
+                    type="button"
+                    role="menuitem"
+                    onClick={() => {
+                      setPage("profile");
+                      setIsProfileMenuOpen(false);
+                    }}
+                    className="flex items-center gap-2 rounded-lg px-3 py-2 text-left text-sm font-bold text-black transition hover:bg-sky-50"
+                  >
+                    <UserRound size={16} />
+                    Profile
+                  </button>
+                  <button
+                    type="button"
+                    role="menuitem"
+                    onClick={() => {
+                      logout();
+                      setIsProfileMenuOpen(false);
+                    }}
+                    className="flex items-center gap-2 rounded-lg px-3 py-2 text-left text-sm font-bold text-black transition hover:bg-sky-50"
+                  >
+                    <LogOut size={16} />
+                    Logout
+                  </button>
+                </div>
+              )}
+            </div>
           ) : (
             <Button onClick={() => setPage("login")}><LogIn size={16} /> Login</Button>
           )}
@@ -322,7 +363,7 @@ function TopNav() {
 }
 
 function TopBanner() {
-  const bannerImages = ["/k5.png", "/Z1.jpeg", "/Z2.png", "/Z4.jpeg", "/Z5.png"];
+  const bannerImages = ["/k5.png", "/Z1.jpeg", "/Z2.png", "/Z4.png", "/Z5.png"];
   const [activeBanner, setActiveBanner] = useState(0);
   const activeBannerSrc = bannerImages[activeBanner];
   const bannerObjectPosition = activeBannerSrc === "/k5.png" || activeBannerSrc === "/Z5.png" ? "object-center" : "object-[center_18%]";
@@ -355,7 +396,7 @@ function AppLayout({ children }: { children: ReactNode }) {
           <TopBanner />
           <TopNav />
         </div>
-        <main className="mx-auto min-w-0 max-w-7xl px-3 py-4 sm:px-4 lg:px-5">{children}</main>
+        <main className="mx-auto min-w-0 max-w-7xl px-2 py-4 sm:px-3 lg:px-4">{children}</main>
       </div>
     </div>
   );
@@ -363,26 +404,49 @@ function AppLayout({ children }: { children: ReactNode }) {
 
 function LandingPage() {
   const setPage = useAppStore((state) => state.setPage);
+  const [isNavScrolled, setIsNavScrolled] = useState(false);
   const features = [
     ["Create", "Set the virtual game, entry amount, rules, and match deadline."],
     ["Escrow", "Both players lock the same entry before the match starts."],
     ["Verify", "Upload scoreboard screenshots for AI-assisted result checks."],
     ["Settle", "Apply win, refund, or penalty rules from one match room."],
   ];
+
+  useEffect(() => {
+    const updateNav = () => setIsNavScrolled(window.scrollY > 12);
+
+    updateNav();
+    window.addEventListener("scroll", updateNav, { passive: true });
+    return () => window.removeEventListener("scroll", updateNav);
+  }, []);
+
   return (
     <div className="landing-page min-h-screen bg-white">
       <div className="grid gap-0 bg-white">
-        <section className="landing-hero relative mt-0 min-h-screen overflow-hidden bg-sky-500">
-          <img src="/k5.png" alt="Virtual game artwork" className="absolute inset-0 size-full object-cover" />
-          <div className="absolute inset-0 bg-sky-500/25" />
+        <section className="landing-hero relative mt-0 min-h-screen overflow-hidden bg-black">
+          <img src="/KZ.png" alt="Virtual game artwork" className="absolute inset-0 size-full object-cover" />
+          <div className="absolute inset-0 bg-black/20" />
           <div className="pointer-events-none absolute inset-x-0 bottom-0 h-44 bg-gradient-to-b from-transparent via-white/70 to-white" />
           <div className="relative z-10 flex min-h-screen flex-col p-5 sm:p-7 lg:p-9">
-            <div className="fixed left-1/2 top-5 z-50 flex -translate-x-1/2 items-center justify-center text-white">
-              <div className="flex items-center gap-2 rounded-xl bg-white/18 px-3 py-2 backdrop-blur-sm">
+            <nav className={`fixed inset-x-0 top-0 z-50 flex items-center justify-between gap-4 px-5 py-4 text-white transition-all duration-300 sm:px-7 lg:px-9 ${isNavScrolled ? "bg-sky-500/35 shadow-lg shadow-sky-900/10 backdrop-blur-xl" : "bg-transparent"}`}>
+              <a href="#about" className="flex items-center gap-3">
                 <BrandMark size="sm" />
-                <span className="text-base font-bold">Astro</span>
+                <span className="text-xl font-black">Astro</span>
+              </a>
+              <div className="hidden items-center gap-7 text-sm font-bold md:flex">
+                <a href="#about" className="transition hover:text-white/75">About</a>
+                <a href="#how" className="transition hover:text-white/75">How It Works</a>
+                <button onClick={() => setPage("marketplace")} className="transition hover:text-white/75">Marketplace</button>
               </div>
-            </div>
+              <div className="flex items-center gap-2 text-sm font-bold">
+                <button onClick={() => setPage("login")} className="hidden px-3 py-2 transition hover:text-white/75 sm:inline-flex">
+                  Login
+                </button>
+                <button onClick={() => setPage("register")} className="rounded-full bg-white px-4 py-2 text-black transition hover:bg-white/85">
+                  Sign up
+                </button>
+              </div>
+            </nav>
             <div className="relative mt-28 flex-1 sm:mt-32 lg:mt-36">
               <h1 className="max-w-6xl text-[4.2rem] font-black uppercase leading-[0.82] tracking-tight text-white sm:text-[6.5rem] lg:text-[9.5rem]">
                 Challenge. Play. Prove.
@@ -394,14 +458,6 @@ function LandingPage() {
               <p className="mt-6 max-w-2xl text-lg font-bold leading-8 text-white">
                 Create a proposition, lock equal entries, play the match, upload proof, and let the AI referee guide settlement.
               </p>
-            </div>
-            <div className="fixed bottom-6 left-1/2 z-50 grid w-[min(92vw,440px)] -translate-x-1/2 grid-cols-2 gap-2 rounded-2xl bg-white/18 p-2 text-white backdrop-blur-md">
-              <button onClick={() => setPage("login")} className="min-h-14 rounded-xl bg-white/72 px-3 text-sm font-bold text-black backdrop-blur-md sm:px-5 sm:text-base">
-                Login
-              </button>
-              <button onClick={() => setPage("register")} className="min-h-14 rounded-xl bg-sky-600/82 px-3 text-sm font-bold text-white backdrop-blur-md sm:px-5 sm:text-base">
-                Sign up
-              </button>
             </div>
           </div>
         </section>
@@ -482,7 +538,7 @@ function LandingPage() {
               <p className="p-4 text-xl font-bold">Create a challenge</p>
             </div>
             <div className="overflow-hidden rounded-xl border border-black/15 bg-[#f6f6f2]">
-              <img src="/Z4.jpeg" alt="Virtual game artwork" className="h-72 w-full object-cover object-center" />
+              <img src="/Z4.png" alt="Virtual game artwork" className="h-72 w-full object-cover object-center" />
               <p className="p-4 text-xl font-bold">Accept and lock escrow</p>
             </div>
             <div className="overflow-hidden rounded-xl border border-black/15 bg-[#f6f6f2]">
@@ -691,6 +747,8 @@ function ChallengeRow({ challenge }: { challenge: Challenge }) {
 
 function RoomRow({ room }: { room: MatchRoom }) {
   const selectRoom = useAppStore((state) => state.selectRoom);
+  const challenge = useAppStore((state) => state.challenges.find((item) => item.id === room.challengeId));
+  const team = propositionTeamFor(room.challengeId);
   return (
     <button
       onClick={() => selectRoom(room.id)}
@@ -698,11 +756,14 @@ function RoomRow({ room }: { room: MatchRoom }) {
     >
       <span className="flex items-center gap-3">
         <img
-          src="/Manchester%20United%20Logo%20and%20symbol,%20meaning,%20history,%20PNG,%20brand.jpeg"
-          alt="Proposition squad"
+          src={team.logoSrc}
+          alt={team.teamName}
           className="size-9 rounded-full bg-white object-cover ring-2 ring-white"
         />
-        <span>Room {room.id.slice(-4)}</span>
+        <span className="min-w-0">
+          <span className="block truncate font-bold">{challenge?.title ?? `Room ${room.id.slice(-4)}`}</span>
+          <span className="block truncate text-xs text-black/60">{team.teamName}</span>
+        </span>
       </span>
       <MatchStatusBadge status={room.status} />
     </button>
@@ -758,7 +819,7 @@ function ChallengeCard({ challenge }: { challenge: Challenge }) {
   );
 }
 
-function ChallengeListFixedCell({ challenge, isLast = false }: { challenge: Challenge; isLast?: boolean }) {
+function ChallengeListFixedCell({ challenge }: { challenge: Challenge }) {
   const users = useAppStore((state) => state.users);
   const selectChallenge = useAppStore((state) => state.selectChallenge);
   const creator = users.find((user) => user.id === challenge.creatorId);
@@ -767,12 +828,12 @@ function ChallengeListFixedCell({ challenge, isLast = false }: { challenge: Chal
   return (
     <button
       onClick={() => selectChallenge(challenge.id)}
-      className={`marketplace-list-row flex h-24 w-full min-w-0 items-center gap-3 px-5 text-left text-sm transition hover:bg-black/5 dark:hover:bg-white/5 ${isLast ? "" : "border-b"}`}
+      className="marketplace-list-row flex h-16 w-full min-w-0 items-center gap-2.5 rounded-l-xl px-4 text-left text-sm transition hover:bg-black/5 dark:hover:bg-white/5"
     >
       <img
         src={team.logoSrc}
         alt={team.teamName}
-        className="size-9 rounded-full bg-white object-cover ring-2 ring-[#f6f6f2]"
+        className="size-8 rounded-full bg-white object-cover ring-2 ring-[#f6f6f2]"
       />
       <span className="min-w-0">
         <span className="flex items-center gap-1.5 font-bold leading-tight">
@@ -785,13 +846,13 @@ function ChallengeListFixedCell({ challenge, isLast = false }: { challenge: Chal
   );
 }
 
-function ChallengeListMetricsRow({ challenge, isLast = false }: { challenge: Challenge; isLast?: boolean }) {
+function ChallengeListMetricsRow({ challenge }: { challenge: Challenge }) {
   const selectChallenge = useAppStore((state) => state.selectChallenge);
 
   return (
     <button
       onClick={() => selectChallenge(challenge.id)}
-      className={`marketplace-list-row grid h-24 w-full grid-cols-[96px_104px_150px] items-center gap-3 px-5 text-left text-sm transition hover:bg-black/5 dark:hover:bg-white/5 lg:grid-cols-3 ${isLast ? "" : "border-b"}`}
+      className="marketplace-list-row grid h-16 w-full grid-cols-[88px_96px_132px] items-center gap-3 rounded-r-xl px-4 text-left text-sm transition hover:bg-black/5 dark:hover:bg-white/5 lg:grid-cols-3"
     >
       <span className="whitespace-nowrap font-black">{formatMoney(challenge.stakeAmount)}</span>
       <span className="whitespace-nowrap font-black">{formatMoney(challenge.prizePool)}</span>
@@ -822,8 +883,8 @@ function Marketplace() {
       .sort((a, b) => (filter.sort === "highest" ? b.prizePool - a.prizePool : 0));
   }, [challenges, filter]);
   return (
-    <div className="dashboard-page -mx-1 grid gap-5 px-1 sm:-mx-2 sm:px-2 lg:-mx-3 lg:px-3">
-      <div>
+    <div className="dashboard-page grid gap-5">
+      <div className="min-w-0">
         <div className="flex items-start justify-between gap-4">
           <div className="min-w-0">
             <h2 className="text-3xl font-black">Marketplace</h2>
@@ -843,65 +904,67 @@ function Marketplace() {
             )}
           </button>
         </div>
-        <div className="mt-4 grid grid-cols-2 gap-2 sm:grid-cols-4">
-          <SelectControl
-            value={filter.stake}
-            onChange={(stake) => setFilter({ ...filter, stake })}
-            options={[
-              { value: "all", label: "Any stake" },
-              { value: "25", label: "Up to $25" },
-              { value: "50", label: "Up to $50" },
-            ]}
-          />
-          <SelectControl
-            value={filter.squad}
-            onChange={(squad) => setFilter({ ...filter, squad })}
-            options={[
-              { value: "all", label: "Any tier" },
-              { value: "82", label: "Tier 82" },
-              { value: "85", label: "Tier 85" },
-            ]}
-          />
-          <SelectControl
+        <div className="mt-4 grid gap-2">
+          <FilterTabs
             value={filter.status}
             onChange={(status) => setFilter({ ...filter, status })}
             options={[
-              { value: "open", label: "Open" },
-              { value: "accepted", label: "Accepted" },
               { value: "all", label: "All" },
+              { value: "open", label: "Open" },
+              { value: "accepted", label: "Ongoing" },
             ]}
           />
-          <SelectControl
-            value={filter.sort}
-            onChange={(sort) => setFilter({ ...filter, sort })}
-            options={[
-              { value: "newest", label: "Newest" },
-              { value: "highest", label: "Highest prize" },
-            ]}
-          />
+          <div className="no-scrollbar grid max-w-full grid-flow-col auto-cols-max gap-4 overflow-x-auto sm:gap-6">
+            <FilterTabs
+              value={filter.stake}
+              onChange={(stake) => setFilter({ ...filter, stake })}
+              options={[
+                { value: "all", label: "All stakes" },
+                { value: "25", label: "Up to $25" },
+                { value: "50", label: "Up to $50" },
+              ]}
+            />
+            <FilterTabs
+              value={filter.squad}
+              onChange={(squad) => setFilter({ ...filter, squad })}
+              options={[
+                { value: "all", label: "All tiers" },
+                { value: "82", label: "Tier 82" },
+                { value: "85", label: "Tier 85" },
+              ]}
+            />
+            <FilterTabs
+              value={filter.sort}
+              onChange={(sort) => setFilter({ ...filter, sort })}
+              options={[
+                { value: "newest", label: "Newest" },
+                { value: "highest", label: "Highest prize" },
+              ]}
+            />
+          </div>
         </div>
       </div>
       {viewMode === "grid" ? (
         <div className="grid gap-4 lg:grid-cols-2">{filtered.map((challenge) => <ChallengeCard key={challenge.id} challenge={challenge} />)}</div>
       ) : (
-        <div className="grid grid-cols-[240px_minmax(0,1fr)] sm:grid-cols-[280px_minmax(0,1fr)] lg:grid-cols-4">
-          <div className="min-w-0">
-            <div className="marketplace-list-header px-5 py-2 text-xs font-bold uppercase tracking-wide text-black/50">
+        <div className="grid grid-cols-[220px_minmax(0,1fr)] gap-y-2 sm:grid-cols-[260px_minmax(0,1fr)] lg:grid-cols-4">
+          <div className="grid min-w-0 gap-2">
+            <div className="marketplace-list-header px-4 py-1.5 text-[11px] font-bold uppercase tracking-wide text-black/50">
               1v1 Proposition
             </div>
-            {filtered.map((challenge, index) => (
-              <ChallengeListFixedCell key={challenge.id} challenge={challenge} isLast={index === filtered.length - 1} />
+            {filtered.map((challenge) => (
+              <ChallengeListFixedCell key={challenge.id} challenge={challenge} />
             ))}
           </div>
           <div className="no-scrollbar min-w-0 overflow-x-auto lg:col-span-3 lg:overflow-visible">
-            <div className="min-w-[410px] lg:min-w-0">
-              <div className="marketplace-list-header grid grid-cols-[96px_104px_150px] items-center gap-3 px-5 py-2 text-xs font-bold uppercase tracking-wide text-black/50 lg:grid-cols-3">
+            <div className="grid min-w-[410px] gap-2 lg:min-w-0">
+              <div className="marketplace-list-header grid grid-cols-[88px_96px_132px] items-center gap-3 px-4 py-1.5 text-[11px] font-bold uppercase tracking-wide text-black/50 lg:grid-cols-3">
                 <span>Stake</span>
                 <span>Escrow</span>
                 <span>Window</span>
               </div>
-              {filtered.map((challenge, index) => (
-                <ChallengeListMetricsRow key={challenge.id} challenge={challenge} isLast={index === filtered.length - 1} />
+              {filtered.map((challenge) => (
+                <ChallengeListMetricsRow key={challenge.id} challenge={challenge} />
               ))}
             </div>
           </div>
@@ -965,12 +1028,31 @@ function ChallengeDetails() {
   const acceptChallenge = useAppStore((state) => state.acceptChallenge);
   const creator = users.find((user) => user.id === challenge.creatorId);
   const opponent = users.find((user) => user.id === challenge.opponentId);
+  const team = propositionTeamFor(challenge.id);
   return (
     <div className="grid gap-5 lg:grid-cols-[1fr_360px]">
       <section className="glass rounded-xl p-5">
         <div className="flex flex-wrap items-start justify-between gap-3">
-          <div><h2 className="text-3xl font-black">{challenge.title}</h2><p className="text-black/60">Challenge details and mock escrow terms</p></div>
+          <div className="min-w-0">
+            <h2 className="flex min-w-0 flex-wrap items-center gap-2 text-3xl font-black">
+              <img
+                src={team.logoSrc}
+                alt={team.teamName}
+                className="size-10 shrink-0 rounded-full bg-white object-cover ring-2 ring-[#f6f6f2]"
+              />
+              <span className="min-w-0 break-words">{challenge.title}</span>
+              <img src="/checklist.png" alt="Verified" className="size-6 shrink-0 rounded-full object-cover" />
+            </h2>
+            <p className="text-black/60">Challenge details and mock escrow terms</p>
+          </div>
           <MatchStatusBadge status={challenge.status} />
+        </div>
+        <div className="mt-5">
+          <CryptoStakeChart
+            challenge={challenge}
+            playerOneName={creator?.username ?? "Player A"}
+            playerTwoName={opponent?.username ?? "Waiting"}
+          />
         </div>
         <div className="mt-5 grid gap-3 sm:grid-cols-3">
           <Stat label="Stake each" value={formatMoney(challenge.stakeAmount)} />
@@ -1009,22 +1091,31 @@ function CryptoStakeChart({
   playerTwoName: string;
 }) {
   const tickers = [
-    { symbol: "USDC", price: challenge.stakeAmount, change: "+0.08%" },
-    { symbol: "GUSD", price: challenge.stakeAmount, change: "+0.02%" },
+    { symbol: "Stake each", price: formatMoney(challenge.stakeAmount), helper: "Player entry" },
+    { symbol: "Escrow output", price: formatMoney(challenge.prizePool), helper: "Winner pool" },
+    { symbol: "Tier rating", price: challenge.squadRatingLimit, helper: "Squad cap" },
   ];
   const bars = [38, 52, 47, 66, 58, 74, 69, 82, 76, 91];
+  const team = propositionTeamFor(challenge.id);
 
   return (
     <section className="glass overflow-hidden rounded-xl bg-white p-3">
-      <div className="grid gap-3 lg:grid-cols-[1fr_260px]">
+      <div className="grid gap-3">
         <div className="min-w-0">
-          <div className="flex items-start gap-2.5">
-            <img className="size-12 rounded-full object-contain" src="/usdc.png" alt="" />
+          <div className="flex flex-wrap items-start justify-between gap-3">
             <div className="min-w-0">
-              <div className="flex min-w-0 items-center gap-2">
+              <div className="flex min-w-0 flex-wrap items-center gap-2">
+                <span className="inline-flex shrink-0 items-center gap-1 rounded-full bg-sky-50 px-2 py-1">
+                  <img className="size-6 rounded-full object-cover" src={team.logoSrc} alt={team.teamName} />
+                  <span className="text-sm font-black">{playerOneName}</span>
+                </span>
                 <h3 className="truncate text-xl font-black text-black sm:text-2xl">
-                  {playerOneName} vs {playerTwoName}
+                  vs
                 </h3>
+                <span className="inline-flex shrink-0 items-center gap-1 rounded-full bg-[#f6f6f2] px-2 py-1">
+                  <UserRound size={18} strokeWidth={2.5} />
+                  <span className="text-sm font-black">{playerTwoName}</span>
+                </span>
                 <img className="size-5 shrink-0 object-contain" src="/checklist.png" alt="Verified" />
               </div>
               <p className="mt-1.5 flex flex-wrap items-center gap-2 text-xs font-bold text-black/60">
@@ -1036,6 +1127,7 @@ function CryptoStakeChart({
                 <span>Cycle 1</span>
               </p>
             </div>
+            <img className="size-11 rounded-full object-contain" src="/usdc.png" alt="USDC" />
           </div>
           <p className="mt-5 text-4xl font-black text-black">{formatMoney(challenge.prizePool)}</p>
           <div className="mt-3 flex h-36 items-end gap-2 overflow-hidden rounded-lg bg-white px-3 py-2">
@@ -1049,21 +1141,19 @@ function CryptoStakeChart({
             ))}
           </div>
         </div>
-        <div className="grid gap-3 self-end">
-          <div className="grid gap-3 self-end sm:grid-cols-2 lg:w-full lg:grid-cols-1">
-            {tickers.map((ticker) => (
-              <div key={ticker.symbol} className="flex items-center justify-between rounded-lg bg-white px-3 py-2.5">
-                <div className="flex items-center gap-2">
-                  <img className="size-8 rounded-full object-contain" src="/usdc.png" alt="" />
-                  <span className="font-black">{ticker.symbol}</span>
-                </div>
-                <div className="text-right">
-                  <p className="font-black">{formatMoney(ticker.price)}</p>
-                  <p className="text-xs font-bold text-emerald-600">{ticker.change}</p>
+        <div className="grid gap-2 sm:grid-cols-3">
+          {tickers.map((ticker) => (
+            <div key={ticker.symbol} className="flex items-center justify-between gap-3 rounded-lg bg-white px-3 py-2.5">
+              <div className="flex min-w-0 items-center gap-2">
+                <img className="size-8 shrink-0 rounded-full object-contain" src="/usdc.png" alt="" />
+                <div className="min-w-0">
+                  <p className="truncate text-xs font-bold text-black/55">{ticker.symbol}</p>
+                  <p className="text-[11px] font-bold text-emerald-600">{ticker.helper}</p>
                 </div>
               </div>
-            ))}
-          </div>
+              <p className="shrink-0 font-black">{ticker.price}</p>
+            </div>
+          ))}
         </div>
       </div>
     </section>
@@ -1100,6 +1190,7 @@ function AIChatRoom({ room, challenge }: { room: MatchRoom; challenge: Challenge
   const playerTwo = users.find((user) => user.id === room.playerTwoId);
   const currentSlot = currentUser?.id === room.playerOneId ? "one" : "two";
   const opponent = currentUser?.id === room.playerOneId ? playerTwo : playerOne;
+  const team = propositionTeamFor(challenge.id);
   const sendMessage = () => {
     sendRoomMessage(room.id, message);
     setMessage("");
@@ -1108,9 +1199,16 @@ function AIChatRoom({ room, challenge }: { room: MatchRoom; challenge: Challenge
     <section className="glass overflow-hidden rounded-xl">
       <div className="px-3 py-3 sm:px-4">
         <div className="flex flex-wrap items-center justify-between gap-3">
-          <div>
-            <p className="text-sm text-black/60">{challenge.title}</p>
-            <h2 className="text-2xl font-black">Match Room</h2>
+          <div className="flex min-w-0 items-center gap-3">
+            <img
+              src={team.logoSrc}
+              alt={team.teamName}
+              className="size-11 shrink-0 rounded-full bg-white object-cover ring-2 ring-[#f6f6f2]"
+            />
+            <div className="min-w-0">
+              <p className="truncate text-sm text-black/60">{challenge.title}</p>
+              <h2 className="text-2xl font-black">Match Room</h2>
+            </div>
           </div>
           <div className="flex flex-wrap items-center gap-2">
             <MatchStatusBadge status={room.status} />
@@ -1494,6 +1592,9 @@ function ProfilePage() {
   const following = 36 + user.losses * 4 + user.cancelledMatches;
   const winRate = totalMatches > 0 ? Math.round((user.wins / totalMatches) * 100) : 0;
   const profileBio = user.bio ?? "Verified Astro player. Trust-first 1v1 competitor with escrow-backed matches and AI-reviewed evidence.";
+  const statusLabel = user.suspiciousUploads >= 3 ? "Restricted" : "Verified";
+  const winShare = totalMatches > 0 ? Math.round((user.wins / totalMatches) * 100) : 0;
+  const lossShare = totalMatches > 0 ? Math.round((user.losses / totalMatches) * 100) : 0;
   const saveProfile = (event: FormEvent) => {
     event.preventDefault();
     const patch = {
@@ -1509,10 +1610,9 @@ function ProfilePage() {
   };
   return (
     <div className="grid gap-5">
-      <section className="glass overflow-hidden rounded-xl">
-        <div className="h-32 bg-gradient-to-r from-sky-200 via-blue-100 to-slate-100 sm:h-44" />
-        <div className="px-4 pb-5 sm:px-6">
-          <div className="-mt-12 flex items-end justify-between gap-3 sm:-mt-16">
+      <section className="glass">
+        <div className="pb-5">
+          <div className="flex items-end justify-between gap-3">
             <div className="grid size-24 place-items-center rounded-full border-4 border-white bg-sky-500 text-white sm:size-32">
               <UserRound size={48} strokeWidth={1.8} />
             </div>
@@ -1571,11 +1671,66 @@ function ProfilePage() {
               </div>
             </form>
           )}
-          <div className="profile-stat-strip mt-5 grid grid-cols-2 overflow-hidden rounded-xl bg-[#f6f6f2] sm:grid-cols-4">
+          <div className="profile-stat-strip profile-data-panel mt-5 grid grid-cols-4 overflow-hidden rounded-xl">
             <Stat label="Wins" value={user.wins} />
             <Stat label="Losses" value={user.losses} />
             <Stat label="Win rate" value={`${winRate}%`} />
-            <Stat label="Status" value={user.suspiciousUploads >= 3 ? "Restricted" : "Verified"} />
+            <Stat label="Status" value={statusLabel} />
+          </div>
+          <div className="mt-4 grid gap-3 sm:grid-cols-2 xl:grid-cols-4">
+            <div className="profile-chart-card rounded-xl bg-white p-4">
+              <div className="flex items-center justify-between gap-3">
+                <div>
+                  <p className="text-sm font-bold text-black/60">Wins</p>
+                  <p className="mt-1 text-2xl font-black">{user.wins}</p>
+                </div>
+                <div
+                  className="grid size-20 place-items-center rounded-full"
+                  style={{ background: `conic-gradient(#0ea5e9 ${winShare}%, #d6d6d2 0)` }}
+                >
+                  <span className="profile-chart-inner grid size-14 place-items-center rounded-full bg-white text-sm font-black">{winShare}%</span>
+                </div>
+              </div>
+              <p className="mt-3 text-xs text-black/55">{user.wins} wins out of {totalMatches} completed matches.</p>
+            </div>
+            <div className="profile-chart-card rounded-xl bg-white p-4">
+              <div className="flex items-center justify-between gap-3">
+                <div>
+                  <p className="text-sm font-bold text-black/60">Losses</p>
+                  <p className="mt-1 text-2xl font-black">{user.losses}</p>
+                </div>
+                <div className="h-20 w-24 rounded-lg bg-white p-2">
+                  <div className="flex h-full items-end gap-2">
+                    <span className="flex-1 rounded-t bg-sky-500" style={{ height: `${Math.max(winShare, 8)}%` }} />
+                    <span className="profile-loss-bar flex-1 rounded-t bg-black/35" style={{ height: `${Math.max(lossShare, 8)}%` }} />
+                  </div>
+                </div>
+              </div>
+              <p className="mt-3 text-xs text-black/55">{lossShare}% loss share against {winShare}% wins.</p>
+            </div>
+            <div className="profile-chart-card rounded-xl bg-white p-4">
+              <p className="text-sm font-bold text-black/60">Win rate</p>
+              <p className="mt-1 text-2xl font-black">{winRate}%</p>
+              <div className="mt-5 h-3 overflow-hidden rounded-full bg-white">
+                <div className="h-full rounded-full bg-sky-500" style={{ width: `${winRate}%` }} />
+              </div>
+              <p className="mt-3 text-xs text-black/55">Performance score based on wins versus total results.</p>
+            </div>
+            <div className="profile-chart-card rounded-xl bg-white p-4">
+              <p className="text-sm font-bold text-black/60">Status</p>
+              <div className="mt-3 flex items-center gap-3">
+                <div
+                  className="grid size-16 place-items-center rounded-full"
+                  style={{ background: `conic-gradient(#3b82f6 ${user.trustScore}%, #d6d6d2 0)` }}
+                >
+                  <span className="profile-chart-inner grid size-11 place-items-center rounded-full bg-white text-xs font-black">{user.trustScore}</span>
+                </div>
+                <div>
+                  <p className="text-xl font-black">{statusLabel}</p>
+                  <p className="text-xs text-black/55">Trust score</p>
+                </div>
+              </div>
+            </div>
           </div>
         </div>
       </section>
